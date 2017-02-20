@@ -22,11 +22,11 @@ public class Mechanics : MonoBehaviour {
         mechUI.SetActive(false);
     }
 
-    /* void Update()
+    void Update()
     {
         if (paused.GetPausedState())
         {
             mechUI.SetActive(false);
         }
-    } */
+    }
 }
