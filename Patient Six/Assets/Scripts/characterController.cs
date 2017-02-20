@@ -15,7 +15,9 @@ public class characterController : MonoBehaviour {
 	public Vector3 positionOne;
 	public Vector3 positionTwo;
 
-	public CharacterSounds audso;
+    public PausedState paused;
+
+    public CharacterSounds audso;
 	public Rigidbody rb;
 
 	public float speed = 10.0f;
@@ -31,62 +33,71 @@ public class characterController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		float translation = Input.GetAxis ("Vertical") * speed;
-		float straffe = Input.GetAxis ("Horizontal") * speed;
-//		float translation = Input.GetAxis ("Vertical");
-//		float straffe = Input.GetAxis ("Horizontal");
 
-//		movementVec = new Vector3 (straffe, 0, translation);
-//		movementVec = movementVec.normalized;
+        if (!paused.GetPausedState())
+        {
+            float translation = Input.GetAxis("Vertical") * speed;
+            float straffe = Input.GetAxis("Horizontal") * speed;
+            //		float translation = Input.GetAxis ("Vertical");
+            //		float straffe = Input.GetAxis ("Horizontal");
 
-		translation *= Time.deltaTime;
-		straffe += Time.deltaTime;
+            //		movementVec = new Vector3 (straffe, 0, translation);
+            //		movementVec = movementVec.normalized;
 
-		positionOne = transform.position;
-//		if (Input.GetAxis ("Vertical") > 0) {
-//			transform.Translate (straffe / 100, 0, translation);
-//		}
-//		if (Input.GetAxis ("Horizontal") > 0) {
-//			transform.Translate (straffe / 100, 0, translation);
-//		}
-//		if (Input.GetAxis ("Vertical") < 0) {
-//			transform.Translate (straffe / 100, 0, translation);
-//		}
-//		if (Input.GetAxis ("Horizontal") < 0) {
-//			transform.Translate (straffe / 100, 0, translation);
-//
-//		}
-		if (Input.GetAxis ("Vertical") > 0) {
-			transform.Translate (0, 0, translation);
-		}
-		if (Input.GetAxis ("Horizontal") > 0) {
-			transform.Translate (straffe / 50, 0, 0);
-		}
-		if (Input.GetAxis ("Vertical") < 0) {
-			transform.Translate (0, 0, translation);
-		}
-		if (Input.GetAxis ("Horizontal") < 0) {
-			transform.Translate (straffe / 50, 0, 0);
+            translation *= Time.deltaTime;
+            straffe += Time.deltaTime;
 
-		}
-
-		positionTwo = transform.position;
-
-		if (positionOne != positionTwo && audso.sourceTwoIsPlaying() == false) {
-			Debug.Log ("play footsteps");
-			audso.playFootsteps ();
-		}
-
-		if (positionOne == positionTwo) {
-			audso.stopFootsteps ();
-		}
-
-		if (Input.GetKeyDown ("escape")) {
-			Cursor.lockState = CursorLockMode.None;
-		}
+            positionOne = transform.position;
 
 
+            //		if (Input.GetAxis ("Vertical") > 0) {
+            //			transform.Translate (straffe / 100, 0, translation);
+            //		}
+            //		if (Input.GetAxis ("Horizontal") > 0) {
+            //			transform.Translate (straffe / 100, 0, translation);
+            //		}
+            //		if (Input.GetAxis ("Vertical") < 0) {
+            //			transform.Translate (straffe / 100, 0, translation);
+            //		}
+            //		if (Input.GetAxis ("Horizontal") < 0) {
+            //			transform.Translate (straffe / 100, 0, translation);
+            //
+            //		}
+            if (Input.GetAxis("Vertical") > 0)
+            {
+                transform.Translate(0, 0, translation);
+            }
+            if (Input.GetAxis("Horizontal") > 0)
+            {
+                transform.Translate(straffe / 50, 0, 0);
+            }
+            if (Input.GetAxis("Vertical") < 0)
+            {
+                transform.Translate(0, 0, translation);
+            }
+            if (Input.GetAxis("Horizontal") < 0)
+            {
+                transform.Translate(straffe / 50, 0, 0);
 
+            }
 
+            positionTwo = transform.position;
+
+            if (positionOne != positionTwo && audso.sourceTwoIsPlaying() == false)
+            {
+                Debug.Log("play footsteps");
+                audso.playFootsteps();
+            }
+
+            if (positionOne == positionTwo)
+            {
+                audso.stopFootsteps();
+            }
+
+            if (Input.GetKeyDown("escape"))
+            {
+                Cursor.lockState = CursorLockMode.None;
+            }
+        }
 	}
 }

@@ -18,7 +18,11 @@ public class clipboardManager : MonoBehaviour
     GameObject mainCamera;
     public GameObject clipboardUI;
     private GameObject activeImage;
+    //clipboard showing
     bool isShowing = false;
+    //puzzle showing
+    bool isActive = false;
+    public GameObject puzzleUI;
 
     void Start()
     {
@@ -43,6 +47,10 @@ public class clipboardManager : MonoBehaviour
             {
                 // check if clipboard
                 clip = hit.collider.GetComponent<Clipboard>();
+
+                // check if puzzledoor
+                Puzzle p = hit.collider.GetComponent<Puzzle>();
+
 
                 //if is clipboard
                 clipData clipMatch = null;
@@ -69,6 +77,20 @@ public class clipboardManager : MonoBehaviour
                     clipboardUI.SetActive(false);
                     activeImage.SetActive(false);
                     isShowing = false;
+                }
+
+                if (isActive == false)
+                {
+                    if (p != null)
+                    {
+                        puzzleUI.SetActive(true);
+                        isActive = true;
+                    }
+                }
+                else
+                {
+                    puzzleUI.SetActive(false);
+                    isActive = false;
                 }
             }
         }
