@@ -156,6 +156,7 @@ public class playerRayCasting : MonoBehaviour {
 
 					Debug.Log ("WTF");
 					if (whatIHit.collider.gameObject.GetComponent<Medicine> ().whatMedAmI == Medicine.MedicineType.sound) {
+						audso.playTakeItem ();
 						GM.instance.onTakeSoundMed ();
 						Destroy (whatIHit.collider.gameObject);
 					}
