@@ -60,7 +60,8 @@ public class GM : MonoBehaviour {
 
 	public bool hidden = false;
 
-
+	public bool playSound = true;
+	public int playSoundCount = 0;
 
 	void Awake() {
 //		clonePlayer = Instantiate (playerPrefab, playerPosition, Quaternion.identity) as GameObject;
@@ -91,7 +92,7 @@ public class GM : MonoBehaviour {
 		soundLevelOne = audiosources [0];
 		soundLevelTwo = audiosources [1];
 		soundLevelThree = audiosources [2];
-//		playLevelOneSound ();
+		playLevelOneSound ();
 
 	}
 
@@ -164,22 +165,58 @@ public class GM : MonoBehaviour {
 			sMeter.gameObject.SetActive (true);
 		}
 
+//		if (sMeter.getSoundValue () <= 100 && sMeter.getSoundValue () > 75) {
+//			playSoundCount = 0;
+//			if (playSound == true && playSoundCount == 0) {
+//				playLevelOneSound ();
+//				stopLevelTwoSound ();
+//				stopLevelThreeSound ();
+//				playSoundCount = 5;
+//			}
+//			playSound = false;
+//
+//		}
+//		if (sMeter.getSoundValue () < 75 && sMeter.getSoundValue () > 50) {
+//			playSoundCount = 1;
+//			playSound = true;
+//			if (playSound == true && playSoundCount == 1) {
+//				playLevelTwoSound ();	
+//				stopLevelOneSound();
+//				stopLevelThreeSound ();
+//				playSoundCount = 5;
+//			}
+//			playSound = false;
+//
+//		}
+//		if (sMeter.getSoundValue () < 50 && sMeter.getSoundValue () > 25) {
+//			playSoundCount = 2;
+//			playSound = true;
+//			if (playSound == true && playSoundCount == 2) {
+//				playLevelThreeSound ();
+//				stopLevelTwoSound();
+//				stopLevelOneSound ();
+//				playSoundCount = 5;
+//			}
+//			playSound = false;
+//
+//		}
 		if (sMeter.getSoundValue () <= 100 && sMeter.getSoundValue () > 75) {
-			playLevelOneSound ();
-			stopLevelTwoSound ();
-			stopLevelThreeSound ();
+			playSoundCount = 0;
+//			playSound = true;
+
 		}
 		if (sMeter.getSoundValue () < 75 && sMeter.getSoundValue () > 50) {
-			playLevelTwoSound ();	
-			stopLevelOneSound();
-			stopLevelThreeSound ();
+			playSoundCount = 1;
+//			playSound = true;
+
+
 		}
 		if (sMeter.getSoundValue () < 50 && sMeter.getSoundValue () > 25) {
-			playLevelThreeSound ();
-			stopLevelTwoSound();
-			stopLevelOneSound ();
-		}
+			playSoundCount = 2;
+//			playSound = true;
 
+
+		}
 		if (sMeter.getSoundValue () <= 0) {
 			Debug.Log ("SOUND METER LOW");
 			GameOver ();
@@ -240,6 +277,10 @@ public class GM : MonoBehaviour {
 
 	public void playLevelOneSound() {
 		Debug.Log ("PLAY AMBIENT SOUND");
+//		if (playSound == true && playSoundCount == 0) {
+//			soundLevelOne.Play ();
+//			playSound = false;
+//		}
 		soundLevelOne.Play ();
 		stopLevelTwoSound ();
 		stopLevelThreeSound ();
