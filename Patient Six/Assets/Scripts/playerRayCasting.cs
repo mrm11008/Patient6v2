@@ -1,10 +1,30 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 using System.Collections;
 
 public class playerRayCasting : MonoBehaviour {
 
+    [System.Serializable]
+    public class clipData
+    {
+        public Clipboard clip;
+        public GameObject boardIMG;
+    }
 
-	public float distanceToSee;
+    Clipboard clip;
+    public List<clipData> clips;
+
+    public GameObject clipboardUI;
+    private GameObject activeImage;
+    //clipboard showing
+    bool clipShowing = false;
+    //puzzle showing
+    bool puzShowing = false;
+    public GameObject puzzleUI;
+    public GameObject mechUI;
+    public PausedState paused;
+
+    public float distanceToSee;
 	RaycastHit whatIHit;
 	private bool touching = false;
 
@@ -24,7 +44,83 @@ public class playerRayCasting : MonoBehaviour {
 		touching = false;
 		if (Physics.Raycast (this.transform.position, this.transform.forward, out whatIHit, distanceToSee)) {
 			touching = true;
-			Debug.Log (whatIHit.collider.tag);
+
+            // check if clipboard
+            clip = whatIHit.collider.GetComponent<Clipboard>();
+
+            // check if puzzledoor
+            Puzzle p = whatIHit.collider.GetComponent<Puzzle>();
+
+            //check if cassette
+            CassettePlayer cp = whatIHit.collider.GetComponent<CassettePlayer>();
+
+            if (paused.GetPausedState())
+            {
+                mechUI.SetActive(false);
+            }
+            else
+            {
+                if (p != null || clip != null || cp != null)
+                {
+                    mechUI.SetActive(true);
+                }
+                else
+                {
+                    mechUI.SetActive(false);
+                }
+
+            }
+
+            //if is clipboard
+            clipData clipMatch = null;
+            for (int i = 0; i < clips.Count; i++)
+            {
+                if (clips[i].clip == clip)
+                {
+                    clipMatch = clips[i];
+                    break;
+                }
+            }
+
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+
+                if (clipShowing == false)
+                {
+                    if (clipMatch != null)
+                    {
+                        clipboardUI.SetActive(true);
+                        clipMatch.boardIMG.SetActive(true);
+                        activeImage = clipMatch.boardIMG;
+                        clipShowing = true;
+                    }
+                }
+                else
+                {
+                    clipboardUI.SetActive(false);
+                    activeImage.SetActive(false);
+                    clipShowing = false;
+                }
+                //
+
+                //if is puzzle
+                if (puzShowing == false)
+                {
+                    if (p != null)
+                    {
+                        puzzleUI.SetActive(true);
+                        puzShowing = true;
+                    }
+                }
+                else
+                {
+                    puzzleUI.SetActive(false);
+                    puzShowing = false;
+                }
+                //
+            }
+
+            Debug.Log (whatIHit.collider.tag);
 //			if (whatIHit.collider.tag == null) {
 //				GM.instance.hideMoveMed ();
 //			}
