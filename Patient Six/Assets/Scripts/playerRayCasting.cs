@@ -19,6 +19,7 @@ public class playerRayCasting : MonoBehaviour {
     //player voice
     public AudioSource puzzleinvest;
     public AudioSource medinvest;
+    public AudioSource otherdoorinvest;
     //clipboard showing
     bool clipShowing = false;
     //puzzle showing
@@ -53,6 +54,8 @@ public class playerRayCasting : MonoBehaviour {
 
             // check if puzzledoor
             Puzzle p = whatIHit.collider.GetComponent<Puzzle>();
+            //check if otherdoor
+            OtherDoor od = whatIHit.collider.GetComponent<OtherDoor>();
 
             //check if cassette
             CassettePlayer cp = whatIHit.collider.GetComponent<CassettePlayer>();
@@ -66,7 +69,7 @@ public class playerRayCasting : MonoBehaviour {
             }
             else
             {
-                if (p != null || clip != null || cp != null || m != null)
+                if (p != null || clip != null || cp != null || m != null || od != null)
                 {
                     mechUI.SetActive(true);
                 }
@@ -97,6 +100,10 @@ public class playerRayCasting : MonoBehaviour {
                 if (p != null)
                 {
                     puzzleinvest.Play();
+                }
+                if (od != null)
+                {
+                    otherdoorinvest.Play();
                 }
             }
 
