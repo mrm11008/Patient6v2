@@ -16,6 +16,9 @@ public class playerRayCasting : MonoBehaviour {
 
     public GameObject clipboardUI;
     private GameObject activeImage;
+    //player voice
+    public AudioSource puzzleinvest;
+    public AudioSource medinvest;
     //clipboard showing
     bool clipShowing = false;
     //puzzle showing
@@ -54,13 +57,16 @@ public class playerRayCasting : MonoBehaviour {
             //check if cassette
             CassettePlayer cp = whatIHit.collider.GetComponent<CassettePlayer>();
 
+            //check if medicine
+            Medicine m = whatIHit.collider.GetComponent<Medicine>();
+
             if (paused.GetPausedState())
             {
                 mechUI.SetActive(false);
             }
             else
             {
-                if (p != null || clip != null || cp != null)
+                if (p != null || clip != null || cp != null || m != null)
                 {
                     mechUI.SetActive(true);
                 }
@@ -79,6 +85,18 @@ public class playerRayCasting : MonoBehaviour {
                 {
                     clipMatch = clips[i];
                     break;
+                }
+            }
+
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                if (m != null)
+                {
+                    medinvest.Play();
+                }
+                if (p != null)
+                {
+                    puzzleinvest.Play();
                 }
             }
 
