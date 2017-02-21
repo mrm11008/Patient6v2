@@ -46,6 +46,7 @@ public class RobotMovement : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		robotsound = gameObject.GetComponent<RobotSounds> ();
+		currentPoint = 0;
 	}
 	
 	// Update is called once per frame
@@ -261,7 +262,9 @@ public class RobotMovement : MonoBehaviour {
 	}
 
 
-
+	public void placeRobotAtLocation() {
+		currentPoint = 4;
+	}
 
 	//---------------------------------Add New State functions------------------------------------------
 

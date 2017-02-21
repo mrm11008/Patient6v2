@@ -64,10 +64,40 @@ public class playerRayCasting : MonoBehaviour {
 					}
 				}
 
-				if (whatIHit.collider.tag == "Cassette") { 
+				if (whatIHit.collider.name == "Casette Player 6") { 
 
 					if (whatIHit.collider.gameObject.GetComponent<InteractionObjects> ().whatObjAmI == InteractionObjects.InteractType.cassette) {
-						GM.instance.accessCassetteOne ();
+						GM.instance.accessCassetteSix ();
+					}
+				}
+				if (whatIHit.collider.name == "Casette Player 5") { 
+
+					if (whatIHit.collider.gameObject.GetComponent<InteractionObjects> ().whatObjAmI == InteractionObjects.InteractType.cassette) {
+						GM.instance.accessCassetteSix ();
+					}
+				}
+				if (whatIHit.collider.name == "Casette Player 4") { 
+
+					if (whatIHit.collider.gameObject.GetComponent<InteractionObjects> ().whatObjAmI == InteractionObjects.InteractType.cassette) {
+						GM.instance.accessCassetteSix ();
+					}
+				}
+				if (whatIHit.collider.name == "Casette Player 3") { 
+
+					if (whatIHit.collider.gameObject.GetComponent<InteractionObjects> ().whatObjAmI == InteractionObjects.InteractType.cassette) {
+						GM.instance.accessCassetteSix ();
+					}
+				}
+				if (whatIHit.collider.name == "Casette Player 2") { 
+
+					if (whatIHit.collider.gameObject.GetComponent<InteractionObjects> ().whatObjAmI == InteractionObjects.InteractType.cassette) {
+						GM.instance.accessCassetteSix ();
+					}
+				}
+				if (whatIHit.collider.name == "Casette Player 1") { 
+
+					if (whatIHit.collider.gameObject.GetComponent<InteractionObjects> ().whatObjAmI == InteractionObjects.InteractType.cassette) {
+						GM.instance.accessCassetteSix ();
 					}
 				}
 

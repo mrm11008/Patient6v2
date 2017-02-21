@@ -12,8 +12,9 @@ public class GM : MonoBehaviour {
 	//Player and Robot objects
 	private GameObject clonePlayer;
 	private GameObject cloneRobot;
-	private Vector3 playerPosition = new Vector3 (27.0f, 1.11f, -20f);
-	private Vector3 robotPosition = new Vector3 (17f, 1f, 2f);
+//	private Vector3 playerPosition = new Vector3 (27.0f, 1.11f, -20f);
+	private Vector3 playerPosition = new Vector3 (19.5f, 1.0f, 68.0f);
+	private Vector3 robotPosition = new Vector3 (4f, 0.5f, 70f);
 	public bool playerDarted;
 
 	//Meter Values
@@ -111,11 +112,15 @@ public class GM : MonoBehaviour {
 		float fadeTime = GameObject.Find ("GM").GetComponent<Fading> ().BeginFade (-1);
 		playerPrefab.transform.position = playerPosition;
 
+
 	}
 
 	void replaceRobot() {
 		//change inSight to false
 		//reposition him 
+		robotPrefab.transform.position = robotPosition;
+//		//function call to set robots path position
+		robotPrefab.GetComponent<RobotMovement>().placeRobotAtLocation();
 //		robotPrefab.gameObject.GetComponent<RobotMovement>().toggleInSight();
 		hidden = true;
 	}
@@ -248,7 +253,7 @@ public class GM : MonoBehaviour {
 
 
 	//---------------------------------CASSETTE CODE---------------------------------------
-	public void accessCassetteOne() {
+	public void accessCassetteSix() {
 
 		cp6.playCassette ();
 	}
