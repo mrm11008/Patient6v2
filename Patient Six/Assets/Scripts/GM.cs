@@ -6,6 +6,7 @@ public class GM : MonoBehaviour {
 
 	public static GM instance = null;
 	public GameObject startGame;
+	public GameObject gameOver;
 	public GameObject playerPrefab;
 	public GameObject robotPrefab;
 
@@ -99,6 +100,13 @@ public class GM : MonoBehaviour {
 		Application.LoadLevel (Application.loadedLevel);
 	}
 
+	public void GameOver() {
+
+		gameOver.SetActive (true);
+		Time.timeScale = .2f;
+		Invoke ("Reset", 3.0f);
+	}
+
 	public void dartReset() {
 		//pause the scene, move the player to his bed, deduct 50% meters
 		Time.timeScale = 0.25f;
@@ -112,17 +120,18 @@ public class GM : MonoBehaviour {
 		float fadeTime = GameObject.Find ("GM").GetComponent<Fading> ().BeginFade (-1);
 		playerPrefab.transform.position = playerPosition;
 
-
 	}
 
 	void replaceRobot() {
 		//change inSight to false
 		//reposition him 
+
 		robotPrefab.transform.position = robotPosition;
 //		//function call to set robots path position
 		robotPrefab.GetComponent<RobotMovement>().placeRobotAtLocation();
 //		robotPrefab.gameObject.GetComponent<RobotMovement>().toggleInSight();
-		hidden = true;
+//		hidden = true;
+		robotPrefab.GetComponent<RobotMovement>().dartReset();
 	}
 
 	// Update is called once per frame
@@ -136,7 +145,7 @@ public class GM : MonoBehaviour {
 
 		}
 		if (Input.GetKeyDown ("r")) {
-//			Reset ();
+			Reset ();
 		}
 
 		if (playerDarted == true) {
@@ -166,6 +175,13 @@ public class GM : MonoBehaviour {
 //			playLevelThreeSound ();
 //			stopLevelTwoSound();
 		}
+
+		if (sMeter.getSoundValue () <= 0) {
+			Debug.Log ("SOUND METER LOW");
+			GameOver ();
+//			Reset ();
+		}
+
 	}
 
 	//---------------------------------METER CODE---------------------------------------
@@ -212,6 +228,10 @@ public class GM : MonoBehaviour {
 		movementMeterValue -= decrementMovement;
 	}
 
+	public void onTakeSoundMed() {
+		sMeter.incrementSound ();
+	}
+
 	//---------------------------------SOUND CODE---------------------------------------
 
 	public void playLevelOneSound() {
@@ -252,13 +272,37 @@ public class GM : MonoBehaviour {
 		//SLOW DOWN MOUSE MOVEMENT ASWELL
 		playerDarted = true;
 
-	}
 
+	}
+	public void dartSound() {
+		sMeter.dartDecrementSound ();
+
+	}
 
 	//---------------------------------CASSETTE CODE---------------------------------------
 	public void accessCassetteSix() {
 
 		cp6.playCassette ();
+	}
+	public void accessCassetteFive() {
+
+		cp5.playCassette ();
+	}
+	public void accessCassetteFour() {
+
+		cp4.playCassette ();
+	}
+	public void accessCassetteThree() {
+
+		cp3.playCassette ();
+	}
+	public void accessCassetteTwo() {
+
+		cp2.playCassette ();
+	}
+	public void accessCassetteOne() {
+
+		cp1.playCassette ();
 	}
 
 }

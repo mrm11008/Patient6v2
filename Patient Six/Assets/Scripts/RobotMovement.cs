@@ -93,6 +93,7 @@ public class RobotMovement : MonoBehaviour {
 			if (whatIHit.collider.tag == "Player") {
 				if (playSoundTwo == true) {
 					robotsound.playDartSound ();
+					GM.instance.dartSound ();
 					playSoundTwo = false;
 				}
 				Debug.Log ("DART!!");
@@ -266,6 +267,13 @@ public class RobotMovement : MonoBehaviour {
 
 	public void placeRobotAtLocation() {
 		currentPoint = 4;
+	}
+
+	public void dartReset() {
+		inSight = false;
+//		wait = true;
+//		investigate = false;
+
 	}
 
 	//---------------------------------Add New State functions------------------------------------------

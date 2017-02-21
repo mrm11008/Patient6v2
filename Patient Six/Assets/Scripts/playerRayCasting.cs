@@ -151,6 +151,18 @@ public class playerRayCasting : MonoBehaviour {
 
 
 				}
+				if (whatIHit.collider.tag == "SoundMedicine") {
+
+
+					Debug.Log ("WTF");
+					if (whatIHit.collider.gameObject.GetComponent<Medicine> ().whatMedAmI == Medicine.MedicineType.sound) {
+						GM.instance.onTakeSoundMed ();
+						Destroy (whatIHit.collider.gameObject);
+					}
+
+
+
+				}
 
 				if (whatIHit.collider.tag == "Clipboard") { 
 
@@ -164,37 +176,37 @@ public class playerRayCasting : MonoBehaviour {
 
 					if (whatIHit.collider.gameObject.GetComponent<InteractionObjects> ().whatObjAmI == InteractionObjects.InteractType.cassette) {
 						GM.instance.accessCassetteSix ();
-						GM.instance.startSoundMeter ();
+//						GM.instance.startSoundMeter ();
 					}
 				}
 				if (whatIHit.collider.name == "Casette Player 5") { 
 
 					if (whatIHit.collider.gameObject.GetComponent<InteractionObjects> ().whatObjAmI == InteractionObjects.InteractType.cassette) {
-						GM.instance.accessCassetteSix ();
+						GM.instance.accessCassetteFive ();
 					}
 				}
 				if (whatIHit.collider.name == "Casette Player 4") { 
 
 					if (whatIHit.collider.gameObject.GetComponent<InteractionObjects> ().whatObjAmI == InteractionObjects.InteractType.cassette) {
-						GM.instance.accessCassetteSix ();
+						GM.instance.accessCassetteFour ();
 					}
 				}
 				if (whatIHit.collider.name == "Casette Player 3") { 
 
 					if (whatIHit.collider.gameObject.GetComponent<InteractionObjects> ().whatObjAmI == InteractionObjects.InteractType.cassette) {
-						GM.instance.accessCassetteSix ();
+						GM.instance.accessCassetteThree ();
 					}
 				}
 				if (whatIHit.collider.name == "Casette Player 2") { 
 
 					if (whatIHit.collider.gameObject.GetComponent<InteractionObjects> ().whatObjAmI == InteractionObjects.InteractType.cassette) {
-						GM.instance.accessCassetteSix ();
+						GM.instance.accessCassetteTwo ();
 					}
 				}
 				if (whatIHit.collider.name == "Casette Player 1") { 
 
 					if (whatIHit.collider.gameObject.GetComponent<InteractionObjects> ().whatObjAmI == InteractionObjects.InteractType.cassette) {
-						GM.instance.accessCassetteSix ();
+						GM.instance.accessCassetteOne ();
 					}
 				}
 

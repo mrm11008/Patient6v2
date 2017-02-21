@@ -36,7 +36,20 @@ public class SoundMeter : MonoBehaviour {
 		soundFloat = soundFloat - decrementValue;
 		Debug.Log (soundFloat);
 	}
+	public void incrementSound() {
+		if (soundFloat <= 100) {
+			if (soundFloat + 25 >= 100) {
+				soundFloat = 100;
+			} else {
+				soundFloat = soundFloat + 25;
+			}
+		}
 
+	}
+
+	public void dartDecrementSound() {
+		soundFloat = soundFloat - 50;
+	}
 	public int getSoundValue() {
 		return soundFloat;
 	}

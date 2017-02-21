@@ -100,4 +100,11 @@ public class characterController : MonoBehaviour {
             }
         }
 	}
+
+
+	void OnTriggerEnter(Collider other) {
+		if (other.gameObject.tag == "MeterTrigger") {
+			GM.instance.startSoundMeter ();
+		}
+	}
 }
