@@ -22,6 +22,7 @@ public class characterController : MonoBehaviour {
 
 	public float speed = 10.0f;
 	public float length = 0;
+	public int getOutCount = 0;
 
 	private Vector3 movementVec;
 	// Use this for initialization
@@ -104,7 +105,13 @@ public class characterController : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other) {
 		if (other.gameObject.tag == "MeterTrigger") {
-			GM.instance.startSoundMeter ();
+
+			if (getOutCount == 0) {
+				GM.instance.startSoundMeter ();
+				audso.playGetOut ();
+				getOutCount++;
+			}
+
 		}
 	}
 }

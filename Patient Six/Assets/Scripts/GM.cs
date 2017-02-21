@@ -90,8 +90,8 @@ public class GM : MonoBehaviour {
 		var audiosources = this.gameObject.GetComponents<AudioSource> ();
 		soundLevelOne = audiosources [0];
 		soundLevelTwo = audiosources [1];
-//		soundLevelThree = audiosources [2];
-		playLevelOneSound ();
+		soundLevelThree = audiosources [2];
+//		playLevelOneSound ();
 
 	}
 
@@ -103,8 +103,8 @@ public class GM : MonoBehaviour {
 	public void GameOver() {
 
 		gameOver.SetActive (true);
-		Time.timeScale = .2f;
-		Invoke ("Reset", 3.0f);
+		Time.timeScale = .1f;
+		Invoke ("Reset", 1.0f);
 	}
 
 	public void dartReset() {
@@ -164,16 +164,20 @@ public class GM : MonoBehaviour {
 			sMeter.gameObject.SetActive (true);
 		}
 
-		if (sMeter.getSoundValue () < 100 && sMeter.getSoundValue () > 75) {
-//			playLevelOneSound ();
+		if (sMeter.getSoundValue () <= 100 && sMeter.getSoundValue () > 75) {
+			playLevelOneSound ();
+			stopLevelTwoSound ();
+			stopLevelThreeSound ();
 		}
 		if (sMeter.getSoundValue () < 75 && sMeter.getSoundValue () > 50) {
-//			playLevelTwoSound ();	
-//			stopLevelOneSound();
+			playLevelTwoSound ();	
+			stopLevelOneSound();
+			stopLevelThreeSound ();
 		}
 		if (sMeter.getSoundValue () < 50 && sMeter.getSoundValue () > 25) {
-//			playLevelThreeSound ();
-//			stopLevelTwoSound();
+			playLevelThreeSound ();
+			stopLevelTwoSound();
+			stopLevelOneSound ();
 		}
 
 		if (sMeter.getSoundValue () <= 0) {

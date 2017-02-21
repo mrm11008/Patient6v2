@@ -48,7 +48,15 @@ public class SoundMeter : MonoBehaviour {
 	}
 
 	public void dartDecrementSound() {
-		soundFloat = soundFloat - 50;
+//		soundFloat = soundFloat - 50;
+
+			if (soundFloat - 50 <= 0) {
+				soundFloat = 0;
+			} else {
+				soundFloat = soundFloat - 50;
+			}
+		
+
 	}
 	public int getSoundValue() {
 		return soundFloat;

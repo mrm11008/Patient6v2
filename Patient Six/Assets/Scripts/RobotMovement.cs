@@ -91,6 +91,7 @@ public class RobotMovement : MonoBehaviour {
 
 		if (Physics.Raycast (this.transform.position, this.transform.forward, out whatIHit, distanceToAttack)) {
 			if (whatIHit.collider.tag == "Player") {
+				
 				if (playSoundTwo == true) {
 					robotsound.playDartSound ();
 					GM.instance.dartSound ();
@@ -271,6 +272,9 @@ public class RobotMovement : MonoBehaviour {
 
 	public void dartReset() {
 		inSight = false;
+		playSoundOne = true;
+		playSoundTwo = true;
+
 //		wait = true;
 //		investigate = false;
 

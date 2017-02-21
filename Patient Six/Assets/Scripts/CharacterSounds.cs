@@ -8,6 +8,7 @@ public class CharacterSounds : MonoBehaviour {
 	public AudioClip pickUp;
 	public AudioClip takeItem;
 	public AudioClip footsteps;
+	public AudioClip getOut;
 
 	// Use this for initialization
 	void Start () {
@@ -34,6 +35,8 @@ public class CharacterSounds : MonoBehaviour {
 		return audiosource2.isPlaying;
 	}
 
-
+	public void playGetOut() {
+		audiosource.PlayOneShot (getOut);
+	}
 
 }
