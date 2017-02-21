@@ -260,7 +260,9 @@ public class RobotMovement : MonoBehaviour {
 	public void toggleInSight() {
 		inSight = false;
 	}
-
+	public void toggleInSightTrue() {
+		inSight = true;
+	}
 
 	public void placeRobotAtLocation() {
 		currentPoint = 4;

@@ -68,6 +68,7 @@ public class playerRayCasting : MonoBehaviour {
 
 					if (whatIHit.collider.gameObject.GetComponent<InteractionObjects> ().whatObjAmI == InteractionObjects.InteractType.cassette) {
 						GM.instance.accessCassetteSix ();
+						GM.instance.startSoundMeter ();
 					}
 				}
 				if (whatIHit.collider.name == "Casette Player 5") { 

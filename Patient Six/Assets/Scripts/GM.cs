@@ -14,7 +14,7 @@ public class GM : MonoBehaviour {
 	private GameObject cloneRobot;
 //	private Vector3 playerPosition = new Vector3 (27.0f, 1.11f, -20f);
 	private Vector3 playerPosition = new Vector3 (19.5f, 1.0f, 68.0f);
-	private Vector3 robotPosition = new Vector3 (4f, 0.5f, 70f);
+	private Vector3 robotPosition = new Vector3 (14f, 1f, 86f);
 	public bool playerDarted;
 
 	//Meter Values
@@ -104,7 +104,7 @@ public class GM : MonoBehaviour {
 		Time.timeScale = 0.25f;
 		float fadeTime = GameObject.Find ("GM").GetComponent<Fading> ().BeginFade (1);
 		Invoke ("replacePlayer", 1.0f);
-		replaceRobot ();
+		Invoke("replaceRobot" , 1.0f);
 	}
 
 	void replacePlayer() {
@@ -168,16 +168,19 @@ public class GM : MonoBehaviour {
 		}
 	}
 
+	//---------------------------------METER CODE---------------------------------------
+	public void startSoundMeter() {
+		sSwitch = true;
 
-
+	}
 
 	//---------------------------------HIDE CODE---------------------------------------
 	public void playerHidden() {
 		hidden = true;
 		mSwitch = true;
-		sSwitch = true;
 
 	}
+
 	public void playerNotHidden() {
 		hidden = false;
 	}
