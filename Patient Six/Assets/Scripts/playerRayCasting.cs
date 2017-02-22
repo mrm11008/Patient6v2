@@ -26,6 +26,7 @@ public class playerRayCasting : MonoBehaviour {
     bool puzShowing = false;
     public GameObject puzzleUI;
     public GameObject mechUI;
+    public GameObject singlemech;
     public PausedState paused;
 
     public float distanceToSee;
@@ -66,18 +67,24 @@ public class playerRayCasting : MonoBehaviour {
             if (paused.GetPausedState())
             {
                 mechUI.SetActive(false);
+                singlemech.SetActive(false);
             }
             else
             {
-                if (p != null || clip != null || cp != null || m != null || od != null)
+                if (p != null || m != null || od != null)
                 {
                     mechUI.SetActive(true);
+                }
+                else if(clip != null || cp != null)
+                {
+                    singlemech.SetActive(true);
                 }
                 else
                 {
                     mechUI.SetActive(false);
+                    singlemech.SetActive(false);
                 }
-
+                       
             }
 
             //if is clipboard
