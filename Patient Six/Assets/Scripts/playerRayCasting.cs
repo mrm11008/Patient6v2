@@ -196,19 +196,6 @@ public class playerRayCasting : MonoBehaviour {
 
 
 				}
-				if (whatIHit.collider.tag == "LightMedicine") {
-
-
-					Debug.Log ("WTF");
-					if (whatIHit.collider.gameObject.GetComponent<Medicine> ().whatMedAmI == Medicine.MedicineType.light) {
-						audso.playTakeItem ();
-						GM.instance.onTakeLightMed ();
-						Destroy (whatIHit.collider.gameObject);
-					}
-
-
-
-				}
 
 				if (whatIHit.collider.tag == "Clipboard") { 
 

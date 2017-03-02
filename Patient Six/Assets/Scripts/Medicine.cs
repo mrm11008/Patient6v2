@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Medicine : MonoBehaviour {
 
-	public enum MedicineType {movement, sound, light};
+	public enum MedicineType {movement, sound};
 	public MedicineType whatMedAmI;
 
 	// Use this for initialization

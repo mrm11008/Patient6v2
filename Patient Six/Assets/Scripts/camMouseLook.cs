@@ -5,9 +5,7 @@ public class camMouseLook : MonoBehaviour {
 
 	Vector2 mouseLook;
 	Vector2 smoothV;
-//	public float sensitivity = 5.0f;
-	public float sensitivity = 2.5f;
-
+	public float sensitivity = 5.0f;
 	public float smoothing = 2.0f;
     public PausedState paused;
 

@@ -66,19 +66,19 @@ public class characterController : MonoBehaviour {
             //		}
             if (Input.GetAxis("Vertical") > 0)
             {
-                transform.Translate(0, 0, translation / 2);
+                transform.Translate(0, 0, translation);
             }
             if (Input.GetAxis("Horizontal") > 0)
             {
-                transform.Translate(straffe / 70, 0, 0);
+                transform.Translate(straffe / 50, 0, 0);
             }
             if (Input.GetAxis("Vertical") < 0)
             {
-                transform.Translate(0, 0, translation / 2);
+                transform.Translate(0, 0, translation);
             }
             if (Input.GetAxis("Horizontal") < 0)
             {
-                transform.Translate(straffe / 70, 0, 0);
+                transform.Translate(straffe / 50, 0, 0);
 
             }
 

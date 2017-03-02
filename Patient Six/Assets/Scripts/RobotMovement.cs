@@ -202,7 +202,7 @@ public class RobotMovement : MonoBehaviour {
 
 	void OnCollisionEnter(Collision col) {
 		if (col.gameObject.name == "Player") {
-//			GM.instance.dartPlayer ();
+			GM.instance.dartPlayer ();
 			inSight = true;
 		}
 	}
@@ -278,17 +278,6 @@ public class RobotMovement : MonoBehaviour {
 //		wait = true;
 //		investigate = false;
 
-	}
-
-	public void foundPlayer() {
-		inSight = true;
-
-		if (playSoundOne == true) {
-			robotsound.playFoundSound ();
-			playSoundOne = false;
-		}
-
-		Debug.Log ("I SEE THE PLAYER");
 	}
 
 	//---------------------------------Add New State functions------------------------------------------
