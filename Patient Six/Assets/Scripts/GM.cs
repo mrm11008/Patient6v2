@@ -27,9 +27,11 @@ public class GM : MonoBehaviour {
     //public GameObject MovementMeter;
 	public MovementMeter mMeter;
 	public SoundMeter sMeter;
+	public LightMeter lMeter;
 	public float mValue;
 	public bool mSwitch = false;
 	public bool sSwitch = false;
+	public bool lSwitch = false;
 
 	//Movement Variables
 	public GameObject movementMed;
@@ -62,6 +64,10 @@ public class GM : MonoBehaviour {
 
 	public bool playSound = true;
 	public int playSoundCount = 0;
+	public int playSoundCountNew = 0;
+	public int lightCount = 0;
+	public int lightCountNew = 0;
+	public float alphaValues = 0.0f;
 
 	void Awake() {
 //		clonePlayer = Instantiate (playerPrefab, playerPosition, Quaternion.identity) as GameObject;
@@ -112,6 +118,7 @@ public class GM : MonoBehaviour {
 		//pause the scene, move the player to his bed, deduct 50% meters
 		Time.timeScale = 0.25f;
 		float fadeTime = GameObject.Find ("GM").GetComponent<Fading> ().BeginFade (1);
+//		GameObject.Find ("GM").GetComponent<Fading> ().BeginFade (1, 1);
 		Invoke ("replacePlayer", 1.0f);
 		Invoke("replaceRobot" , 1.0f);
 	}
@@ -119,6 +126,7 @@ public class GM : MonoBehaviour {
 	void replacePlayer() {
 		Time.timeScale = 1f;
 		float fadeTime = GameObject.Find ("GM").GetComponent<Fading> ().BeginFade (-1);
+//		GameObject.Find ("GM").GetComponent<Fading> ().BeginFade (-1, 1);
 		playerPrefab.transform.position = playerPosition;
 
 	}
@@ -163,72 +171,89 @@ public class GM : MonoBehaviour {
 		//SOUND CHECKS
 		if (sSwitch == true) {
 			sMeter.gameObject.SetActive (true);
+
+		}
+		if (lSwitch == true) {
+			lMeter.gameObject.SetActive (true);
 		}
 
-//		if (sMeter.getSoundValue () <= 100 && sMeter.getSoundValue () > 75) {
-//			playSoundCount = 0;
-//			if (playSound == true && playSoundCount == 0) {
-//				playLevelOneSound ();
-//				stopLevelTwoSound ();
-//				stopLevelThreeSound ();
-//				playSoundCount = 5;
-//			}
-//			playSound = false;
-//
-//		}
-//		if (sMeter.getSoundValue () < 75 && sMeter.getSoundValue () > 50) {
-//			playSoundCount = 1;
-//			playSound = true;
-//			if (playSound == true && playSoundCount == 1) {
-//				playLevelTwoSound ();	
-//				stopLevelOneSound();
-//				stopLevelThreeSound ();
-//				playSoundCount = 5;
-//			}
-//			playSound = false;
-//
-//		}
-//		if (sMeter.getSoundValue () < 50 && sMeter.getSoundValue () > 25) {
-//			playSoundCount = 2;
-//			playSound = true;
-//			if (playSound == true && playSoundCount == 2) {
-//				playLevelThreeSound ();
-//				stopLevelTwoSound();
-//				stopLevelOneSound ();
-//				playSoundCount = 5;
-//			}
-//			playSound = false;
-//
-//		}
+		//------------------------------------SOUND METER LEVEL CHECK--------------------------
 		if (sMeter.getSoundValue () <= 100 && sMeter.getSoundValue () > 75) {
-			playSoundCount = 0;
+			playSoundCountNew = 0;
 //			playSound = true;
 
 		}
 		if (sMeter.getSoundValue () < 75 && sMeter.getSoundValue () > 50) {
-			playSoundCount = 1;
+			playSoundCountNew = 1;
 //			playSound = true;
 
 
 		}
 		if (sMeter.getSoundValue () < 50 && sMeter.getSoundValue () > 25) {
-			playSoundCount = 2;
+			playSoundCountNew = 2;
 //			playSound = true;
 
 
 		}
+
+		if (playSoundCount == playSoundCountNew) {
+
+		} else if (playSoundCountNew == 0) {
+			playLevelOneSound ();
+			playSoundCount = 0;
+		} else if (playSoundCountNew == 1) {
+			playLevelTwoSound ();
+			playSoundCount = 1;
+		} else if (playSoundCountNew == 2) {
+			playLevelThreeSound ();
+			playSoundCount = 2;
+		}
+
 		if (sMeter.getSoundValue () <= 0) {
 			Debug.Log ("SOUND METER LOW");
 			GameOver ();
 //			Reset ();
 		}
 
+		alphaValues = lMeter.getAlphaValue ();
+		GameObject.Find ("GM").GetComponent<FadingLight> ().BeginFade (1, alphaValues);
+
+		//------------------------------------LIGHT METER LEVEL CHECK--------------------------
+//		if (lMeter.getLightValue () <= 100 && lMeter.getLightValue () > 75) {
+//			lightCountNew = 0;
+////			float fadeTime = GameObject.Find ("GM").GetComponent<Fading> ().BeginFade (-1, 1.0);
+////			GameObject.Find ("GM").GetComponent<FadingLight> ().BeginFade (-1);
+//		}
+//		if (lMeter.getLightValue () < 75 && lMeter.getLightValue () > 50) {
+//			lightCountNew = 1;
+////			float fadeTime = GameObject.Find ("GM").GetComponent<Fading> ().BeginFade (1, 0.75);
+////			GameObject.Find ("GM").GetComponent<Fading> ().BeginFade (1, 1);
+////			GameObject.Find ("GM").GetComponent<FadingLight> ().BeginFade (1, 0.2f);
+//			Debug.Log ("FADE!!!!!!!");
+//		}
+//		if (lMeter.getLightValue () < 50 && lMeter.getLightValue () > 25) {
+//			lightCountNew = 2;
+//		}
+//
+//		if (lightCount == lightCountNew) {
+//
+//		} else if (lightCountNew == 0) {
+//			lightLevelOne ();
+//			lightCount = 0;
+//		} else if (lightCountNew == 1) {
+//			lightLevelTwo ();
+//			lightCount = 1;
+//		} else if (lightCountNew == 2) {
+//			lightLevelThree ();
+//			lightCount = 2;
+//		}
+
 	}
 
 	//---------------------------------METER CODE---------------------------------------
 	public void startSoundMeter() {
 		sSwitch = true;
-
+		lSwitch = true;
 	}
 
 	//---------------------------------HIDE CODE---------------------------------------
@@ -272,11 +297,14 @@ public class GM : MonoBehaviour {
 	public void onTakeSoundMed() {
 		sMeter.incrementSound ();
 	}
+	public void onTakeLightMed() {
+		lMeter.incrementLight ();
+	}
 
 	//---------------------------------SOUND CODE---------------------------------------
 
 	public void playLevelOneSound() {
-		Debug.Log ("PLAY AMBIENT SOUND");
+		Debug.Log ("PLAY LEVEL 1 SOUND");
 //		if (playSound == true && playSoundCount == 0) {
 //			soundLevelOne.Play ();
 //			playSound = false;
@@ -287,13 +315,14 @@ public class GM : MonoBehaviour {
 	}
 
 	public void playLevelTwoSound() {
-		
+		Debug.Log ("PLAY LEVEL 2 SOUND");
 		soundLevelTwo.Play ();
 		stopLevelOneSound ();
 		stopLevelThreeSound ();
 	}
 
 	public void playLevelThreeSound() {
+		Debug.Log ("PLAY LEVEL 3 SOUND");
 		soundLevelThree.Play ();
 		stopLevelOneSound ();
 		stopLevelTwoSound ();
@@ -310,6 +339,22 @@ public class GM : MonoBehaviour {
 	public void stopLevelThreeSound() {
 		soundLevelThree.Stop ();
 	}
+
+	//---------------------------------LIGHT CODE---------------------------------------
+
+	public void lightLevelOne() {
+//		GameObject.Find ("GM").GetComponent<FadingLight> ().BeginFade (1, 0.0f);
+	}
+
+	public void lightLevelTwo() {
+		Debug.Log ("KILL THE LGIHTS!!!");
+//		GameObject.Find ("GM").GetComponent<FadingLight> ().BeginFade (1, 0.2f);
+	}
+
+	public void lightLevelThree() {
+//		GameObject.Find ("GM").GetComponent<FadingLight> ().BeginFade (1, 0.4f);
+	}
+
 
 	//---------------------------------DART CODE---------------------------------------
 	public void dartPlayer() {

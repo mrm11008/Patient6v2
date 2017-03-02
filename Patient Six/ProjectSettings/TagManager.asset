@@ -13,6 +13,7 @@ TagManager:
   - RobotDetectRange
   - SoundMedicine
   - MeterTrigger
+  - LightMedicine
   layers:
   - Default
   - TransparentFX
