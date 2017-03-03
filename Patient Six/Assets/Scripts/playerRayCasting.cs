@@ -142,12 +142,14 @@ public class playerRayCasting : MonoBehaviour {
                     {
                         puzzleUI.SetActive(true);
                         puzShowing = true;
+                        Cursor.lockState = CursorLockMode.None;
                     }
                 }
                 else
                 {
                     puzzleUI.SetActive(false);
                     puzShowing = false;
+                    Cursor.lockState = CursorLockMode.Locked;
                 }
                 //
             }
