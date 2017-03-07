@@ -19,7 +19,7 @@ public class LightMeter : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		Debug.Log ("METER HAS AWOKEN");
+//		Debug.Log ("METER HAS AWOKEN");
 		InvokeRepeating ("decrementLight", 1.0f, 2.0f);
 	}
 	

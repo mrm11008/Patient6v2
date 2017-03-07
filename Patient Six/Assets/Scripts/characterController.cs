@@ -23,8 +23,10 @@ public class characterController : MonoBehaviour {
 	public float speed = 10.0f;
 	public float length = 0;
 	public int getOutCount = 0;
+	public bool hidden = false;
 
 	private Vector3 movementVec;
+	public bool invertMove = false;
 	// Use this for initialization
 	void Start () {
 		Cursor.lockState = CursorLockMode.Locked;
@@ -34,53 +36,104 @@ public class characterController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
+		invertMove = GM.instance.getMovementTrigger ();
         if (!paused.GetPausedState())
         {
-            float translation = Input.GetAxis("Vertical") * speed;
-            float straffe = Input.GetAxis("Horizontal") * speed;
-            //		float translation = Input.GetAxis ("Vertical");
-            //		float straffe = Input.GetAxis ("Horizontal");
+			if (invertMove == false) {
 
-            //		movementVec = new Vector3 (straffe, 0, translation);
-            //		movementVec = movementVec.normalized;
+				float translation = Input.GetAxis("Vertical") * speed;
+				float straffe = Input.GetAxis("Horizontal") * speed;
+				//		float translation = Input.GetAxis ("Vertical");
+				//		float straffe = Input.GetAxis ("Horizontal");
 
-            translation *= Time.deltaTime;
-            straffe += Time.deltaTime;
+				//		movementVec = new Vector3 (straffe, 0, translation);
+				//		movementVec = movementVec.normalized;
 
-            positionOne = transform.position;
+				translation *= Time.deltaTime;
+				straffe += Time.deltaTime;
+
+				positionOne = transform.position;
 
 
-            //		if (Input.GetAxis ("Vertical") > 0) {
-            //			transform.Translate (straffe / 100, 0, translation);
-            //		}
-            //		if (Input.GetAxis ("Horizontal") > 0) {
-            //			transform.Translate (straffe / 100, 0, translation);
-            //		}
-            //		if (Input.GetAxis ("Vertical") < 0) {
-            //			transform.Translate (straffe / 100, 0, translation);
-            //		}
-            //		if (Input.GetAxis ("Horizontal") < 0) {
-            //			transform.Translate (straffe / 100, 0, translation);
-            //
-            //		}
-            if (Input.GetAxis("Vertical") > 0)
-            {
-                transform.Translate(0, 0, translation / 2);
-            }
-            if (Input.GetAxis("Horizontal") > 0)
-            {
-                transform.Translate(straffe / 70, 0, 0);
-            }
-            if (Input.GetAxis("Vertical") < 0)
-            {
-                transform.Translate(0, 0, translation / 2);
-            }
-            if (Input.GetAxis("Horizontal") < 0)
-            {
-                transform.Translate(straffe / 70, 0, 0);
+				//		if (Input.GetAxis ("Vertical") > 0) {
+				//			transform.Translate (straffe / 100, 0, translation);
+				//		}
+				//		if (Input.GetAxis ("Horizontal") > 0) {
+				//			transform.Translate (straffe / 100, 0, translation);
+				//		}
+				//		if (Input.GetAxis ("Vertical") < 0) {
+				//			transform.Translate (straffe / 100, 0, translation);
+				//		}
+				//		if (Input.GetAxis ("Horizontal") < 0) {
+				//			transform.Translate (straffe / 100, 0, translation);
+				//
+				//		}
+				if (Input.GetAxis("Vertical") > 0)
+				{
+					transform.Translate(0, 0, translation / 2);
+				}
+				if (Input.GetAxis("Horizontal") > 0)
+				{
+					transform.Translate(straffe / 70, 0, 0);
+				}
+				if (Input.GetAxis("Vertical") < 0)
+				{
+					transform.Translate(0, 0, translation / 2);
+				}
+				if (Input.GetAxis("Horizontal") < 0)
+				{
+					transform.Translate(straffe / 70, 0, 0);
 
-            }
+				}
+			}
+			if (invertMove == true) {
+				Debug.Log ("INVERT MOVEMENT!");
+				float translation = Input.GetAxis("Vertical") * speed;
+				float straffe = Input.GetAxis("Horizontal") * speed;
+				//		float translation = Input.GetAxis ("Vertical");
+				//		float straffe = Input.GetAxis ("Horizontal");
+
+				//		movementVec = new Vector3 (straffe, 0, translation);
+				//		movementVec = movementVec.normalized;
+
+				translation *= Time.deltaTime;
+				straffe += Time.deltaTime;
+
+				positionOne = transform.position;
+
+
+				//		if (Input.GetAxis ("Vertical") > 0) {
+				//			transform.Translate (straffe / 100, 0, translation);
+				//		}
+				//		if (Input.GetAxis ("Horizontal") > 0) {
+				//			transform.Translate (straffe / 100, 0, translation);
+				//		}
+				//		if (Input.GetAxis ("Vertical") < 0) {
+				//			transform.Translate (straffe / 100, 0, translation);
+				//		}
+				//		if (Input.GetAxis ("Horizontal") < 0) {
+				//			transform.Translate (straffe / 100, 0, translation);
+				//
+				//		}
+				if (Input.GetAxis("Vertical") > 0)
+				{
+					transform.Translate(0, 0, -translation / 2);
+				}
+				if (Input.GetAxis("Horizontal") > 0)
+				{
+					transform.Translate(-straffe / 70, 0, 0);
+				}
+				if (Input.GetAxis("Vertical") < 0)
+				{
+					transform.Translate(0, 0, -translation / 2);
+				}
+				if (Input.GetAxis("Horizontal") < 0)
+				{
+					transform.Translate(-straffe / 70, 0, 0);
+
+				}
+			}
+
 
             positionTwo = transform.position;
 
@@ -113,5 +166,22 @@ public class characterController : MonoBehaviour {
 			}
 
 		}
+		if (other.gameObject.tag == "Hide") {
+
+			hidden = true;
+//			Debug.Log ("PLAYER IS HIDING");
+		}
+	}
+
+	void OnTriggerExit(Collider other) {
+		if (other.gameObject.tag == "Hide") {
+			hidden = false;
+//			Debug.Log ("PLAYER IS NOT HIDING");
+		}
+	}
+
+
+	public bool CheckHidden() {
+		return hidden;
 	}
 }

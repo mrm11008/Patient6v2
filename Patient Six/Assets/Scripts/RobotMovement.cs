@@ -9,7 +9,7 @@ public class RobotMovement : MonoBehaviour {
 	public Transform[] path;
 	public float speed = 1.0f;
 	public float speedRotate = 1.0f;
-	public float reachDist = 10.0f;
+	public float reachDist = 1.0f;
 	public int currentPoint = 0;
 
 	public bool inSight = false;

@@ -14,13 +14,13 @@ public class SoundMeter : MonoBehaviour {
 
 	}
 	void onEnable() {
-		Debug.Log ("METER HAS AWOKEN");
+//		Debug.Log ("METER HAS AWOKEN");
 		InvokeRepeating ("decrementSound", 1.0f, 2.0f);
 
 	}
 	// Use this for initialization
 	void Start () {
-		Debug.Log ("METER HAS AWOKEN");
+//		Debug.Log ("METER HAS AWOKEN");
 
 		InvokeRepeating ("decrementSound", 1.0f, 2.0f);
 
@@ -32,9 +32,9 @@ public class SoundMeter : MonoBehaviour {
 	}
 
 	void decrementSound() {
-		Debug.Log ("DECREMENT");
+//		Debug.Log ("DECREMENT");
 		soundFloat = soundFloat - decrementValue;
-		Debug.Log (soundFloat);
+//		Debug.Log (soundFloat);
 	}
 	public void incrementSound() {
 		if (soundFloat <= 100) {

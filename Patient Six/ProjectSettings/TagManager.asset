@@ -14,6 +14,7 @@ TagManager:
   - SoundMedicine
   - MeterTrigger
   - LightMedicine
+  - Hide
   layers:
   - Default
   - TransparentFX
@@ -28,9 +29,9 @@ TagManager:
   - Robot
   - Walls
   - RobotDetectRange
-  - 
-  - 
-  - 
+  - HallwayFloor
+  - HallwayCeiling
+  - EndCeiling
   - 
   - 
   - 

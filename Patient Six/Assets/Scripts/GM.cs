@@ -39,6 +39,14 @@ public class GM : MonoBehaviour {
 	public float decrementMovement = 1;
 	public float incrementMovement = 25;
 	public bool invertMovement = false;
+	public float movementTimerOne = 20.0f;
+	public float movementTimerTwo = 15.0f;
+	public float movementTimerThree = 10.0f;
+	public float movementTimerOneInvert = 5.0f;
+	public float movementTimerTwoInvert = 10.0f;
+	public float movementTimerThreeInvert = 15.0f;
+	public int movLevelCount = 1;
+	public int moveLevelCountNew = 1;
 	//develop a timer that will tic every x seconds, decrease the movement meter
 
 	//Sound Variables
@@ -165,7 +173,7 @@ public class GM : MonoBehaviour {
 		//MOVEMENT CHECKS
 		if (mSwitch == true) {
 			//MOVEMET TICK WILL ONLY START ONCE ACTIVE
-			Debug.Log("IM TRUE");
+//			Debug.Log("IM TRUE");
 			mMeter.gameObject.SetActive (true);
 		}
 		//SOUND CHECKS
@@ -247,6 +255,31 @@ public class GM : MonoBehaviour {
 //			lightLevelThree ();
 //			lightCount = 2;
 //		}
+		//------------------------------------MOVEMENT METER LEVEL CHECK--------------------------
+		if (mMeter.getMovementValue () <= 100 && mMeter.getMovementValue () > 75) {
+//			Debug.Log ("MLEVEL ONE");
+			movementLevelOne ();
+			moveLevelCountNew = 1;
+		}
+		if (mMeter.getMovementValue () < 75 && mMeter.getMovementValue () > 50) {
+			moveLevelCountNew = 2;
+		}
+		if (mMeter.getMovementValue () < 50 && mMeter.getMovementValue () > 25) {
+			moveLevelCountNew = 3;
+
+		}
+		if (movLevelCount == moveLevelCountNew) {
+
+		} else if (moveLevelCountNew == 1) {
+//			movementLevelOne ();
+			movLevelCount = 1;
+		} else if (moveLevelCountNew == 2) {
+			movementLevelTwo ();
+			movLevelCount = 2;
+		} else if (moveLevelCountNew == 3) {
+			movementLevelThree ();
+			movLevelCount = 3;
+		}
 
 	}
 
@@ -254,6 +287,7 @@ public class GM : MonoBehaviour {
 	public void startSoundMeter() {
 		sSwitch = true;
 		lSwitch = true;
+		mSwitch = true;
 	}
 
 	//---------------------------------HIDE CODE---------------------------------------
@@ -347,7 +381,7 @@ public class GM : MonoBehaviour {
 	}
 
 	public void lightLevelTwo() {
-		Debug.Log ("KILL THE LGIHTS!!!");
+//		Debug.Log ("KILL THE LGIHTS!!!");
 //		GameObject.Find ("GM").GetComponent<FadingLight> ().BeginFade (1, 0.2f);
 	}
 
@@ -355,6 +389,31 @@ public class GM : MonoBehaviour {
 //		GameObject.Find ("GM").GetComponent<FadingLight> ().BeginFade (1, 0.4f);
 	}
 
+	//---------------------------------MOVEMENT CODE---------------------------------------
+
+	public void movementLevelOne() {
+		movementTimerOne -= Time.deltaTime;
+//		Debug.Log (movementTimerOne);
+		if (movementTimerOne <= 0) {
+			Debug.Log ("INVERT!");
+			invertMovement = true;
+			movementTimerOneInvert -= Time.deltaTime;
+			if (movementTimerOneInvert <= 0) {
+				movementTimerOne = 20.0f;
+				movementTimerOneInvert = 5.0f;
+				invertMovement = false;
+			}
+		}
+	}
+	public void movementLevelTwo() {
+
+	}
+	public void movementLevelThree() {
+
+	}
+	public bool getMovementTrigger() {
+		return invertMovement;
+	}
 
 	//---------------------------------DART CODE---------------------------------------
 	public void dartPlayer() {

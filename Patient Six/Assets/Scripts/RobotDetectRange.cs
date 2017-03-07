@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class RobotDetectRange : MonoBehaviour {
 	public GameObject player;
-	public RobotMovement parentR;
+	public RobotController parentR;
 	// Use this for initialization
 	void Start () {
-		parentR = GetComponentInParent<RobotMovement> ();
+		parentR = GetComponentInParent<RobotController> ();
 
 	}
 

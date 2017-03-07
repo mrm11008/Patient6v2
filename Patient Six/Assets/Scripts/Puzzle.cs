@@ -20,7 +20,15 @@ public class Puzzle : MonoBehaviour {
     public Sprite[] sprites;
     public AudioSource click;
 
-    public GameObject solved;
+    //Solved
+    public GameObject puzzleuihide;
+    public GameObject mechUI;
+    public Collider pdoor;
+    public GameObject soundTrigger;
+
+    //Door Triggers
+    public Animator doorLeft;
+    public Animator doorRight;
 
     void Start()
     {
@@ -30,6 +38,8 @@ public class Puzzle : MonoBehaviour {
         box4.sprite = sprites[r];
         box5.sprite = sprites[t];
         box6.sprite = sprites[n];
+
+        pdoor.GetComponent<BoxCollider>();
     }
     
     public void switchImageDown()
@@ -247,6 +257,11 @@ public class Puzzle : MonoBehaviour {
 
         PuzzleSolve();
 
+        if (!soundTrigger.activeSelf)
+        {
+            pdoor.enabled = true;
+        }
+
     }
 
     void PuzzleSolve()
@@ -254,12 +269,38 @@ public class Puzzle : MonoBehaviour {
         //Puzzle's Combination Key
         if (i == 3 && c == 1 && s == 4 && r == 5 && t == 0 && n == 2)
         {
-            solved.SetActive(true);
+            //Door Triggers Reset
+            doorLeft.SetTrigger("doorOpen");
+            doorRight.SetTrigger("doorOpen");
+            doorLeft.ResetTrigger("doorClose");
+            doorRight.ResetTrigger("doorClose");
+            pdoor.enabled = false;
+            soundTrigger.SetActive(true);
+
+            //Close Puzzle
+            Cursor.lockState = CursorLockMode.Locked;
+            mechUI.SetActive(false);
+            PuzzleRestart();
+            puzzleuihide.SetActive(false);
+
         }
-        else
-        {
-            solved.SetActive(false);
-        }
+
+    }
+
+    void PuzzleRestart()
+    {
+        i = 0;
+        c = 1;
+        s = 2;
+        r = 3;
+        t = 4;
+        n = 5;
+        box1.sprite = sprites[i];
+        box2.sprite = sprites[c];
+        box3.sprite = sprites[s];
+        box4.sprite = sprites[r];
+        box5.sprite = sprites[t];
+        box6.sprite = sprites[n];
     }
 
 }

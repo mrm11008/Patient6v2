@@ -22,6 +22,7 @@ public class playerRayCasting : MonoBehaviour {
     public AudioSource otherdoorinvest;
     //clipboard showing
     bool clipShowing = false;
+    public AudioSource clipsound;
     //puzzle showing
     bool puzShowing = false;
     public GameObject puzzleUI;
@@ -125,6 +126,7 @@ public class playerRayCasting : MonoBehaviour {
                         clipMatch.boardIMG.SetActive(true);
                         activeImage = clipMatch.boardIMG;
                         clipShowing = true;
+                        clipsound.Play();
                     }
                 }
                 else
@@ -154,7 +156,7 @@ public class playerRayCasting : MonoBehaviour {
                 //
             }
 
-            Debug.Log (whatIHit.collider.tag);
+//            Debug.Log (whatIHit.collider.tag);
 //			if (whatIHit.collider.tag == null) {
 //				GM.instance.hideMoveMed ();
 //			}
@@ -173,7 +175,7 @@ public class playerRayCasting : MonoBehaviour {
 				if (whatIHit.collider.tag == "MoveMed") {
 					
 
-					Debug.Log ("WTF");
+//					Debug.Log ("WTF");
 					if (whatIHit.collider.gameObject.GetComponent<Medicine> ().whatMedAmI == Medicine.MedicineType.movement) {
 						audso.playTakeItem ();
 						GM.instance.hideMoveMed ();
@@ -188,7 +190,7 @@ public class playerRayCasting : MonoBehaviour {
 				if (whatIHit.collider.tag == "SoundMedicine") {
 
 
-					Debug.Log ("WTF");
+//					Debug.Log ("WTF");
 					if (whatIHit.collider.gameObject.GetComponent<Medicine> ().whatMedAmI == Medicine.MedicineType.sound) {
 						audso.playTakeItem ();
 						GM.instance.onTakeSoundMed ();
@@ -201,7 +203,7 @@ public class playerRayCasting : MonoBehaviour {
 				if (whatIHit.collider.tag == "LightMedicine") {
 
 
-					Debug.Log ("WTF");
+//					Debug.Log ("WTF");
 					if (whatIHit.collider.gameObject.GetComponent<Medicine> ().whatMedAmI == Medicine.MedicineType.light) {
 						audso.playTakeItem ();
 						GM.instance.onTakeLightMed ();
