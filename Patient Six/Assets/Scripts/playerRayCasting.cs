@@ -22,7 +22,6 @@ public class playerRayCasting : MonoBehaviour {
     public AudioSource otherdoorinvest;
     //clipboard showing
     bool clipShowing = false;
-    public AudioSource clipsound;
     //puzzle showing
     bool puzShowing = false;
     public GameObject puzzleUI;
@@ -126,7 +125,6 @@ public class playerRayCasting : MonoBehaviour {
                         clipMatch.boardIMG.SetActive(true);
                         activeImage = clipMatch.boardIMG;
                         clipShowing = true;
-                        clipsound.Play();
                     }
                 }
                 else

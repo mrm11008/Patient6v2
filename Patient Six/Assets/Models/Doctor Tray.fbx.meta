@@ -1,0 +1,406 @@
+fileFormatVersion: 2
+guid: 5e95b4eb722223b4b84488d0a8381ec3
+timeCreated: 1489014656
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Doctor_1:pCube1
+    100004: Doctor_1:pCylinder1
+    100006: Doctor_1:polySurface1
+    100008: Doctor_1:polySurface1 1
+    100010: Doctor_1:polySurface2
+    100012: Doctor_1:polySurface3
+    100014: Doctor_1:pPipe1
+    100016: Doctor_1:pPipe2
+    100018: Doctor_1:transform1
+    100020: Doctor_1:transform2
+    100022: Doctor_1:transform3
+    100024: Doctor_1:transform4
+    100026: Doctor_1:transform5
+    100028: Doctor_1:transform6
+    100030: Doctor_1:transform7
+    100032: extrudedSurface1
+    100034: extrudedSurface2
+    100036: Microscope:pCube1
+    100038: Microscope:pCylinder1
+    100040: Microscope:pCylinder2
+    100042: Microscope:pCylinder3
+    100044: Microscope:pPipe1
+    100046: Microscope:transform1
+    100048: Microscope:transform2
+    100050: Microscope:transform3
+    100052: Microscope:transform4
+    100054: pCube1
+    100056: pCube2
+    100058: pCylinder1
+    100060: polySurface1
+    100062: polySurface1 1
+    100064: polySurface10
+    100066: polySurface11
+    100068: polySurface11 1
+    100070: polySurface14
+    100072: polySurface14 1
+    100074: polySurface15
+    100076: polySurface2
+    100078: polySurface3
+    100080: polySurface4
+    100082: polySurface5
+    100084: polySurface5 1
+    100086: polySurface6
+    100088: polySurface7
+    100090: polySurface8
+    100092: polySurface9
+    100094: pPipe1
+    100096: pPipe2
+    100098: pSphere1
+    100100: pSphere2
+    100102: pSphere3
+    100104: pSphere4
+    100106: pSphere5
+    100108: pSphere6
+    100110: pTorus1
+    100112: pTorus2
+    100114: pTorus3
+    100116: Stethoscope:extrudedSurface1
+    100118: Stethoscope:pCylinder1
+    100120: Stethoscope:pCylinder2
+    100122: Stethoscope:pCylinder3
+    100124: Stethoscope:pCylinder4
+    100126: Stethoscope:pCylinder5
+    100128: Stethoscope:pCylinder6
+    100130: Stethoscope:pCylinder7
+    100132: Stethoscope:pCylinder8
+    100134: Stethoscope:polySurface1
+    100136: Stethoscope:polySurface1 1
+    100138: Stethoscope:polySurface10
+    100140: Stethoscope:polySurface11
+    100142: Stethoscope:polySurface2
+    100144: Stethoscope:polySurface3
+    100146: Stethoscope:polySurface4
+    100148: Stethoscope:polySurface6
+    100150: Stethoscope:polySurface6 1
+    100152: Stethoscope:polySurface7
+    100154: Stethoscope:polySurface9
+    100156: Stethoscope:transform1
+    100158: Stethoscope:transform10
+    100160: Stethoscope:transform11
+    100162: Stethoscope:transform12
+    100164: Stethoscope:transform13
+    100166: Stethoscope:transform14
+    100168: Stethoscope:transform15
+    100170: Stethoscope:transform16
+    100172: Stethoscope:transform17
+    100174: Stethoscope:transform18
+    100176: Stethoscope:transform19
+    100178: Stethoscope:transform2
+    100180: Stethoscope:transform3
+    100182: Stethoscope:transform4
+    100184: Stethoscope:transform5
+    100186: Stethoscope:transform6
+    100188: Stethoscope:transform7
+    100190: Stethoscope:transform8
+    100192: Stethoscope:transform9
+    100194: Thermometer:pCube1
+    100196: Thermometer:pCube2
+    100198: Thermometer:pCube3
+    100200: Thermometer:pCylinder1
+    100202: Thermometer:pCylinder2
+    100204: Thermometer:pCylinder3
+    100206: Thermometer:polySurface2
+    100208: Thermometer:polySurface2 1
+    100210: Thermometer:polySurface4
+    100212: Thermometer:polySurface5
+    100214: Thermometer:polySurface5 1
+    100216: Thermometer:pSphere1
+    100218: Thermometer:pSphere2
+    100220: Thermometer:pSphere3
+    100222: Thermometer:pSphere4
+    100224: Thermometer:pTorus1
+    100226: Thermometer:transform1
+    100228: Thermometer:transform10
+    100230: Thermometer:transform11
+    100232: Thermometer:transform12
+    100234: Thermometer:transform13
+    100236: Thermometer:transform14
+    100238: Thermometer:transform15
+    100240: Thermometer:transform2
+    100242: Thermometer:transform3
+    100244: Thermometer:transform4
+    100246: Thermometer:transform5
+    100248: Thermometer:transform6
+    100250: Thermometer:transform7
+    100252: Thermometer:transform8
+    100254: Thermometer:transform9
+    100256: transform1
+    100258: transform10
+    100260: transform11
+    100262: transform12
+    100264: transform13
+    100266: transform14
+    100268: transform15
+    100270: transform16
+    100272: transform17
+    100274: transform18
+    100276: transform19
+    100278: transform2
+    100280: transform20
+    100282: transform21
+    100284: transform22
+    100286: transform23
+    100288: transform24
+    100290: transform25
+    100292: transform26
+    100294: transform27
+    100296: transform28
+    100298: transform29
+    100300: transform3
+    100302: transform30
+    100304: transform31
+    100306: transform32
+    100308: transform33
+    100310: transform34
+    100312: transform35
+    100314: transform36
+    100316: transform4
+    100318: transform5
+    100320: transform6
+    100322: transform7
+    100324: transform8
+    100326: transform9
+    400000: //RootNode
+    400002: Doctor_1:pCube1
+    400004: Doctor_1:pCylinder1
+    400006: Doctor_1:polySurface1
+    400008: Doctor_1:polySurface1 1
+    400010: Doctor_1:polySurface2
+    400012: Doctor_1:polySurface3
+    400014: Doctor_1:pPipe1
+    400016: Doctor_1:pPipe2
+    400018: Doctor_1:transform1
+    400020: Doctor_1:transform2
+    400022: Doctor_1:transform3
+    400024: Doctor_1:transform4
+    400026: Doctor_1:transform5
+    400028: Doctor_1:transform6
+    400030: Doctor_1:transform7
+    400032: extrudedSurface1
+    400034: extrudedSurface2
+    400036: Microscope:pCube1
+    400038: Microscope:pCylinder1
+    400040: Microscope:pCylinder2
+    400042: Microscope:pCylinder3
+    400044: Microscope:pPipe1
+    400046: Microscope:transform1
+    400048: Microscope:transform2
+    400050: Microscope:transform3
+    400052: Microscope:transform4
+    400054: pCube1
+    400056: pCube2
+    400058: pCylinder1
+    400060: polySurface1
+    400062: polySurface1 1
+    400064: polySurface10
+    400066: polySurface11
+    400068: polySurface11 1
+    400070: polySurface14
+    400072: polySurface14 1
+    400074: polySurface15
+    400076: polySurface2
+    400078: polySurface3
+    400080: polySurface4
+    400082: polySurface5
+    400084: polySurface5 1
+    400086: polySurface6
+    400088: polySurface7
+    400090: polySurface8
+    400092: polySurface9
+    400094: pPipe1
+    400096: pPipe2
+    400098: pSphere1
+    400100: pSphere2
+    400102: pSphere3
+    400104: pSphere4
+    400106: pSphere5
+    400108: pSphere6
+    400110: pTorus1
+    400112: pTorus2
+    400114: pTorus3
+    400116: Stethoscope:extrudedSurface1
+    400118: Stethoscope:pCylinder1
+    400120: Stethoscope:pCylinder2
+    400122: Stethoscope:pCylinder3
+    400124: Stethoscope:pCylinder4
+    400126: Stethoscope:pCylinder5
+    400128: Stethoscope:pCylinder6
+    400130: Stethoscope:pCylinder7
+    400132: Stethoscope:pCylinder8
+    400134: Stethoscope:polySurface1
+    400136: Stethoscope:polySurface1 1
+    400138: Stethoscope:polySurface10
+    400140: Stethoscope:polySurface11
+    400142: Stethoscope:polySurface2
+    400144: Stethoscope:polySurface3
+    400146: Stethoscope:polySurface4
+    400148: Stethoscope:polySurface6
+    400150: Stethoscope:polySurface6 1
+    400152: Stethoscope:polySurface7
+    400154: Stethoscope:polySurface9
+    400156: Stethoscope:transform1
+    400158: Stethoscope:transform10
+    400160: Stethoscope:transform11
+    400162: Stethoscope:transform12
+    400164: Stethoscope:transform13
+    400166: Stethoscope:transform14
+    400168: Stethoscope:transform15
+    400170: Stethoscope:transform16
+    400172: Stethoscope:transform17
+    400174: Stethoscope:transform18
+    400176: Stethoscope:transform19
+    400178: Stethoscope:transform2
+    400180: Stethoscope:transform3
+    400182: Stethoscope:transform4
+    400184: Stethoscope:transform5
+    400186: Stethoscope:transform6
+    400188: Stethoscope:transform7
+    400190: Stethoscope:transform8
+    400192: Stethoscope:transform9
+    400194: Thermometer:pCube1
+    400196: Thermometer:pCube2
+    400198: Thermometer:pCube3
+    400200: Thermometer:pCylinder1
+    400202: Thermometer:pCylinder2
+    400204: Thermometer:pCylinder3
+    400206: Thermometer:polySurface2
+    400208: Thermometer:polySurface2 1
+    400210: Thermometer:polySurface4
+    400212: Thermometer:polySurface5
+    400214: Thermometer:polySurface5 1
+    400216: Thermometer:pSphere1
+    400218: Thermometer:pSphere2
+    400220: Thermometer:pSphere3
+    400222: Thermometer:pSphere4
+    400224: Thermometer:pTorus1
+    400226: Thermometer:transform1
+    400228: Thermometer:transform10
+    400230: Thermometer:transform11
+    400232: Thermometer:transform12
+    400234: Thermometer:transform13
+    400236: Thermometer:transform14
+    400238: Thermometer:transform15
+    400240: Thermometer:transform2
+    400242: Thermometer:transform3
+    400244: Thermometer:transform4
+    400246: Thermometer:transform5
+    400248: Thermometer:transform6
+    400250: Thermometer:transform7
+    400252: Thermometer:transform8
+    400254: Thermometer:transform9
+    400256: transform1
+    400258: transform10
+    400260: transform11
+    400262: transform12
+    400264: transform13
+    400266: transform14
+    400268: transform15
+    400270: transform16
+    400272: transform17
+    400274: transform18
+    400276: transform19
+    400278: transform2
+    400280: transform20
+    400282: transform21
+    400284: transform22
+    400286: transform23
+    400288: transform24
+    400290: transform25
+    400292: transform26
+    400294: transform27
+    400296: transform28
+    400298: transform29
+    400300: transform3
+    400302: transform30
+    400304: transform31
+    400306: transform32
+    400308: transform33
+    400310: transform34
+    400312: transform35
+    400314: transform36
+    400316: transform4
+    400318: transform5
+    400320: transform6
+    400322: transform7
+    400324: transform8
+    400326: transform9
+    2300000: pCube2
+    3300000: pCube2
+    4300000: pCube2
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

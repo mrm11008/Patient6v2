@@ -287,7 +287,7 @@ public class Puzzle : MonoBehaviour {
 
     }
 
-    void PuzzleRestart()
+    public void PuzzleRestart()
     {
         i = 0;
         c = 1;

@@ -1,10 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 public class FadingLight : MonoBehaviour {
 	public Texture fadeOutTexture;
 	public float fadeSpeed = 0.0f;
+	public Image fade;
+
+
 
 	private int drawDepth = -1000;
 	private float alpha = 0.0f;
@@ -21,9 +26,13 @@ public class FadingLight : MonoBehaviour {
 		}
 		alpha = Mathf.Clamp01 (alpha);
 
-		GUI.color = new Color (GUI.color.r, GUI.color.g, GUI.color.b, alpha);
-		GUI.depth = drawDepth;
-		GUI.DrawTexture (new Rect (0, 0, Screen.width, Screen.height), fadeOutTexture);
+		fade.color = new Color (fade.color.r, fade.color.g, fade.color.b, alpha);
+//		fade.depth = drawDepth;
+
+
+//		GUI.color = new Color (GUI.color.r, GUI.color.g, GUI.color.b, alpha);
+//		GUI.depth = drawDepth;
+//		GUI.DrawTexture (new Rect (0, 0, Screen.width, Screen.height), fadeOutTexture);
 	}
 
 	public float BeginFade(int direction, float levelAlpha) {

@@ -5,7 +5,6 @@ using UnityEngine.UI;
 public class GM : MonoBehaviour {
 
 	public static GM instance = null;
-	public GameObject startGame;
 	public GameObject gameOver;
 	public GameObject playerPrefab;
 	public GameObject robotPrefab;
@@ -23,6 +22,15 @@ public class GM : MonoBehaviour {
 	public Text soundMeter;
 	public Text visionMeter;
 	public Text lightMeter;
+
+    //UI Screens
+    public GameObject startUI;
+    public GameObject controlsUI;
+    public GameObject crosshair;
+
+    //Cameras
+    public Camera PlayerCam;
+    public Camera StartScreen;
 
     //public GameObject MovementMeter;
 	public MovementMeter mMeter;
@@ -77,6 +85,9 @@ public class GM : MonoBehaviour {
 	public int lightCountNew = 0;
 	public float alphaValues = 0.0f;
 
+	public bool isChasing = false;
+	public bool levelThreeSound = false;
+
 	void Awake() {
 //		clonePlayer = Instantiate (playerPrefab, playerPosition, Quaternion.identity) as GameObject;
 
@@ -89,20 +100,24 @@ public class GM : MonoBehaviour {
 	}
 	// Use this for initialization
 	void Start () {
-		startTheGame ();
-	}
-	void startTheGame() {
-		Time.timeScale = 0.0f;
-		startGame.SetActive (true);
-	}
-	void Setup() {
-		Time.timeScale = 1.0f;
-		startGame.SetActive (false);
-		//Instantiate player and Robot
-//		cloneRobot = Instantiate (robotPrefab, robotPosition, Quaternion.identity) as GameObject;
+        
+        PlayerCam.enabled = false;
+		StartScreen.enabled = true;
 
-		//Set up sound
-		var audiosources = this.gameObject.GetComponents<AudioSource> ();
+	}
+
+	public void Setup() {
+
+        robotPrefab.SetActive(true);
+		Time.timeScale = 1.0f;
+        //Instantiate player and Robot
+        //		cloneRobot = Instantiate (robotPrefab, robotPosition, Quaternion.identity) as GameObject;
+        //Switch Camera
+        PlayerCam.enabled = true;
+        StartScreen.enabled = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        //Set up sound
+        var audiosources = this.gameObject.GetComponents<AudioSource> ();
 		soundLevelOne = audiosources [0];
 		soundLevelTwo = audiosources [1];
 		soundLevelThree = audiosources [2];
@@ -110,17 +125,23 @@ public class GM : MonoBehaviour {
 
 	}
 
+    public void ResetGame()
+    {
+        Reset();
+    }
+
 	void Reset() {
 		Time.timeScale = 1f;
-		Application.LoadLevel (Application.loadedLevel);
-	}
+        Application.LoadLevel (Application.loadedLevel);
+    }
 
 	public void GameOver() {
 
 		gameOver.SetActive (true);
 		Time.timeScale = .1f;
-		Invoke ("Reset", 1.0f);
-	}
+        Cursor.lockState = CursorLockMode.None;
+
+    }
 
 	public void dartReset() {
 		//pause the scene, move the player to his bed, deduct 50% meters
@@ -145,27 +166,29 @@ public class GM : MonoBehaviour {
 
 		robotPrefab.transform.position = robotPosition;
 //		//function call to set robots path position
-		robotPrefab.GetComponent<RobotMovement>().placeRobotAtLocation();
+		robotPrefab.GetComponent<RobotController>().placeRobotAtLocation();
 //		robotPrefab.gameObject.GetComponent<RobotMovement>().toggleInSight();
 //		hidden = true;
-		robotPrefab.GetComponent<RobotMovement>().dartReset();
+		robotPrefab.GetComponent<RobotController>().dartReset();
 	}
 
 	// Update is called once per frame
 	void Update () {
-		//starting the game
-		if (startGame == true) {
 
-		}
-		if (Input.GetKeyDown ("s")) {
-			Setup ();
+        //if camera is start screen, show start UI
+        if (StartScreen.enabled == true)
+        {
+            startUI.SetActive(true);
+            crosshair.SetActive(false);
+            Cursor.lockState = CursorLockMode.None;
+        }
+        else
+        {
+            startUI.SetActive(false);
+            crosshair.SetActive(true);
+        }
 
-		}
-		if (Input.GetKeyDown ("r")) {
-			Reset ();
-		}
-
-		if (playerDarted == true) {
+        if (playerDarted == true) {
 			dartReset ();
 //			Invoke ("dartReset", 1.0f);
 			playerDarted = false;
@@ -343,6 +366,7 @@ public class GM : MonoBehaviour {
 //			soundLevelOne.Play ();
 //			playSound = false;
 //		}
+		levelThreeSound = false;
 		soundLevelOne.Play ();
 		stopLevelTwoSound ();
 		stopLevelThreeSound ();
@@ -350,6 +374,7 @@ public class GM : MonoBehaviour {
 
 	public void playLevelTwoSound() {
 		Debug.Log ("PLAY LEVEL 2 SOUND");
+		levelThreeSound = false;
 		soundLevelTwo.Play ();
 		stopLevelOneSound ();
 		stopLevelThreeSound ();
@@ -357,9 +382,13 @@ public class GM : MonoBehaviour {
 
 	public void playLevelThreeSound() {
 		Debug.Log ("PLAY LEVEL 3 SOUND");
+		levelThreeSound = true;
 		soundLevelThree.Play ();
 		stopLevelOneSound ();
 		stopLevelTwoSound ();
+	}
+	public bool LevelThreeSoundCheck() {
+		return levelThreeSound;
 	}
 
 	public void stopLevelOneSound() {
@@ -453,5 +482,20 @@ public class GM : MonoBehaviour {
 
 		cp1.playCassette ();
 	}
+
+
+	public void Chasing() {
+		isChasing = true;
+	}
+
+	public void NotChasing() {
+		isChasing = false;
+	}
+
+	public bool ChaseCheck() {
+		return isChasing;
+	}
+
+
 
 }

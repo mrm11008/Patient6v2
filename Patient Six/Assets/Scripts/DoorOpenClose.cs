@@ -18,12 +18,11 @@ public class DoorOpenClose : MonoBehaviour {
     void OnTriggerExit(Collider other)
     {
         doorClose.Play();
-
         doorLeftClose.SetTrigger("doorClose");
         doorRightClose.SetTrigger("doorClose");
         doorLeftClose.ResetTrigger("doorOpen");
         doorRightClose.ResetTrigger("doorOpen");
         soundTrigger.SetActive(false);
     }
-
+    
 }

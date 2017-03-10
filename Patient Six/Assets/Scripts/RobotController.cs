@@ -49,6 +49,9 @@ public class RobotController : MonoBehaviour {
 	public bool playerHidden = false;
 	public characterController player;
 
+	public GameObject redLights;
+	public GameObject whiteLights;
+
 	// Use this for initialization
 	void Start () {
 		robotsound = gameObject.GetComponent<RobotSounds> ();
@@ -76,16 +79,18 @@ public class RobotController : MonoBehaviour {
 		}
 
 		playerHidden = player.CheckHidden ();
-		if (playerHidden == true) {
-			//ENTER A STATE FOR WHAT THE ROBOT DOES WHEN THE PLAYER GETS INTO A HIDING SPOT
+
+		if (currentState == STATE.CHASE) {
+			GM.instance.Chasing ();
 		} else {
+			GM.instance.NotChasing ();
 		}
 
 		Debug.DrawRay (this.transform.position, this.transform.forward * distanceToSee, Color.blue);
 		Debug.DrawRay (this.transform.position, this.transform.forward * distanceToAttack, Color.red);
 
 		//THE PLAYER IS IN SIGHT
-		if (Physics.Raycast (this.transform.position, this.transform.forward, out whatISee, distanceToSee)) {
+		if (Physics.Raycast (this.transform.position, this.transform.forward, out whatISee, distanceToSee) && playerHidden == false) {
 //			Debug.Log (whatISee.collider.tag);
 			if (whatISee.collider.tag == "Player") {
 				if (playSoundOne == true) {
@@ -113,6 +118,11 @@ public class RobotController : MonoBehaviour {
 
 		if (currentPoint >= path.Length) {
 			currentPoint = 0;
+		}
+
+		if (currentState != STATE.CHASE) {
+			redLights.SetActive (false);
+			whiteLights.SetActive (true);
 		}
 
 	}
@@ -155,12 +165,22 @@ public class RobotController : MonoBehaviour {
 //			transform.rotation = Quaternion.Euler (0f, transform.rotation.eulerAngles.y + phase * 1.78f, 0f);
 //		}
 
+		float rotation = 35 * Time.deltaTime;
+		if (path[currentPoint - 1].name == "Destination2" || path[currentPoint - 1].name == "Destination4" || path[currentPoint - 1].name == "Destination7") {
+			print ("SPIN");
+			transform.rotation = Quaternion.Euler (0f, transform.rotation.eulerAngles.y + rotation, 0f);
+
+		} else {
+			_time = _time + Time.deltaTime;
+			float phase = Mathf.Sin (_time / 0.5f);
+			transform.rotation = Quaternion.Euler (0f, transform.rotation.eulerAngles.y + phase * 1.78f, 0f);
+		}
 
 //		Debug.Log ("INVESTIGATING");
 		//ROTATE BACK AND FORTH
-		_time = _time + Time.deltaTime;
-		float phase = Mathf.Sin (_time / 0.5f);
-		transform.rotation = Quaternion.Euler (0f, transform.rotation.eulerAngles.y + phase * 1.78f, 0f);
+//		_time = _time + Time.deltaTime;
+//		float phase = Mathf.Sin (_time / 0.5f);
+//		transform.rotation = Quaternion.Euler (0f, transform.rotation.eulerAngles.y + phase * 1.78f, 0f);
 
 
 
@@ -175,12 +195,20 @@ public class RobotController : MonoBehaviour {
 
 	private void EnterChaseState() {
 		currentState = STATE.CHASE;
+		redLights.SetActive (true);
+		whiteLights.SetActive (false);
 	}
 
 	private void UpdateChase() {
 		transform.LookAt (target);
 //		transform.Translate (Vector3.forward * 1 * Time.deltaTime);
 		myAgent.destination = target.position;
+		if (playerHidden == true) {
+			print ("ROBOT CANT SEE");
+			//ENTER A STATE FOR WHAT THE ROBOT DOES WHEN THE PLAYER GETS INTO A HIDING SPOT
+			EnterPatrolState();
+		} else {
+		}
 	}
 
 	private void EnterPatrolState() {
@@ -254,6 +282,7 @@ public class RobotController : MonoBehaviour {
 	public void dartReset() {
 		playSoundOne = true;
 		playSoundTwo = true;
+		EnterWaitState ();
 	}
 	public void foundPlayer() {
 		EnterChaseState ();

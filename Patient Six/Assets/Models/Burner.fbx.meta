@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 97647c12c5377f64fbf9c66be25eede6
-timeCreated: 1488565237
+guid: 563d4d4b0fbdf5b4b97891795ff993af
+timeCreated: 1489040859
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -8,39 +8,69 @@ ModelImporter:
     100000: //RootNode
     100002: pCone1
     100004: pCylinder1
-    100006: polySurface1
-    100008: polySurface2
-    100010: pSphere1
-    100012: pSphere2
-    100014: pTorus1
-    100016: pTorus2
-    100018: transform1
-    100020: transform2
-    100022: transform3
-    100024: transform4
-    100026: transform5
-    100028: transform6
-    100030: transform7
+    100006: pCylinder2
+    100008: pCylinder3
+    100010: pCylinder4
+    100012: pCylinder5
+    100014: polySurface1
+    100016: polySurface2
+    100018: polySurface3
+    100020: polySurface4
+    100022: polySurface5
+    100024: pPlane1
+    100026: pPlane2
+    100028: pSphere1
+    100030: transform1
+    100032: transform2
+    100034: transform3
+    100036: transform4
+    100038: transform5
+    100040: transform6
     400000: //RootNode
     400002: pCone1
     400004: pCylinder1
-    400006: polySurface1
-    400008: polySurface2
-    400010: pSphere1
-    400012: pSphere2
-    400014: pTorus1
-    400016: pTorus2
-    400018: transform1
-    400020: transform2
-    400022: transform3
-    400024: transform4
-    400026: transform5
-    400028: transform6
-    400030: transform7
-    2300000: pSphere2
-    3300000: pSphere2
-    4300000: pSphere2
-    9500000: //RootNode
+    400006: pCylinder2
+    400008: pCylinder3
+    400010: pCylinder4
+    400012: pCylinder5
+    400014: polySurface1
+    400016: polySurface2
+    400018: polySurface3
+    400020: polySurface4
+    400022: polySurface5
+    400024: pPlane1
+    400026: pPlane2
+    400028: pSphere1
+    400030: transform1
+    400032: transform2
+    400034: transform3
+    400036: transform4
+    400038: transform5
+    400040: transform6
+    2300000: pCone1
+    2300002: pCylinder5
+    2300004: polySurface1
+    2300006: polySurface2
+    2300008: polySurface3
+    2300010: polySurface4
+    2300012: polySurface5
+    2300014: pSphere1
+    3300000: pCone1
+    3300002: pCylinder5
+    3300004: polySurface1
+    3300006: polySurface2
+    3300008: polySurface3
+    3300010: polySurface4
+    3300012: polySurface5
+    3300014: pSphere1
+    4300000: polySurface1
+    4300002: polySurface2
+    4300004: polySurface3
+    4300006: polySurface4
+    4300008: polySurface5
+    4300010: pCylinder5
+    4300012: pSphere1
+    4300014: pCone1
   materials:
     importMaterials: 1
     materialName: 0
@@ -103,7 +133,7 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 0
   humanoidOversampling: 1
   additionalBone: 0
   userData: 

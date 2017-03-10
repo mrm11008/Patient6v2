@@ -25,8 +25,15 @@ public class characterController : MonoBehaviour {
 	public int getOutCount = 0;
 	public bool hidden = false;
 
+	public bool robotChase = false;
+	public bool moveHasPlayed = false;
+	public bool wrenchCheck = false;
+	public bool wrenchHasPlayed = false;
+
+
 	private Vector3 movementVec;
 	public bool invertMove = false;
+
 	// Use this for initialization
 	void Start () {
 		Cursor.lockState = CursorLockMode.Locked;
@@ -37,10 +44,21 @@ public class characterController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		invertMove = GM.instance.getMovementTrigger ();
+		wrenchCheck = GM.instance.LevelThreeSoundCheck ();
+		if (wrenchCheck == true) {
+			if (!wrenchHasPlayed) {
+				audso.lowSoundNoise ();
+				wrenchHasPlayed = true;
+			}
+		} else {
+			wrenchHasPlayed = false;
+		}
+
+
         if (!paused.GetPausedState())
         {
 			if (invertMove == false) {
-
+				moveHasPlayed = false;
 				float translation = Input.GetAxis("Vertical") * speed;
 				float straffe = Input.GetAxis("Horizontal") * speed;
 				//		float translation = Input.GetAxis ("Vertical");
@@ -88,6 +106,10 @@ public class characterController : MonoBehaviour {
 			}
 			if (invertMove == true) {
 				Debug.Log ("INVERT MOVEMENT!");
+				if (!moveHasPlayed) {
+					audso.playRandMovement ();
+					moveHasPlayed = true;
+				}
 				float translation = Input.GetAxis("Vertical") * speed;
 				float straffe = Input.GetAxis("Horizontal") * speed;
 				//		float translation = Input.GetAxis ("Vertical");
@@ -153,6 +175,12 @@ public class characterController : MonoBehaviour {
                 Cursor.lockState = CursorLockMode.None;
             }
         }
+
+		robotChase = GM.instance.ChaseCheck ();
+//		if (robotChase == true && hidden == true) {
+//			audso.playHidden ();
+//		}
+
 	}
 
 
@@ -169,13 +197,16 @@ public class characterController : MonoBehaviour {
 		if (other.gameObject.tag == "Hide") {
 
 			hidden = true;
-//			Debug.Log ("PLAYER IS HIDING");
+			Debug.Log ("PLAYER IS HIDING");
 		}
 	}
 
 	void OnTriggerExit(Collider other) {
 		if (other.gameObject.tag == "Hide") {
 			hidden = false;
+			if (robotChase = true) {
+				audso.playHidden ();
+			}
 //			Debug.Log ("PLAYER IS NOT HIDING");
 		}
 	}
