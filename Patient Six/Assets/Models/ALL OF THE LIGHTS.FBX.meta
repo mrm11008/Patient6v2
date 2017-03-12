@@ -1,0 +1,173 @@
+fileFormatVersion: 2
+guid: c66a101f5e068e74e8b48862ccff537b
+timeCreated: 1489259436
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Cylinder001
+    100004: Cylinder002
+    100006: Cylinder003
+    100008: Cylinder004
+    100010: Cylinder005
+    100012: Cylinder006
+    100014: Cylinder007
+    100016: Cylinder008
+    100018: light
+    100020: light001
+    100022: light001_gate
+    100024: light001_gate001
+    100026: liglt_bulb
+    100028: liglt_bulb001
+    100030: liglt_bulb002
+    100032: Piece_flo
+    100034: Piece_flo001
+    100036: Swing_light
+    100038: Swing_light001
+    400000: //RootNode
+    400002: Cylinder001
+    400004: Cylinder002
+    400006: Cylinder003
+    400008: Cylinder004
+    400010: Cylinder005
+    400012: Cylinder006
+    400014: Cylinder007
+    400016: Cylinder008
+    400018: light
+    400020: light001
+    400022: light001_gate
+    400024: light001_gate001
+    400026: liglt_bulb
+    400028: liglt_bulb001
+    400030: liglt_bulb002
+    400032: Piece_flo
+    400034: Piece_flo001
+    400036: Swing_light
+    400038: Swing_light001
+    2300000: Cylinder001
+    2300002: Cylinder002
+    2300004: Cylinder003
+    2300006: Cylinder004
+    2300008: Cylinder005
+    2300010: Cylinder006
+    2300012: Cylinder007
+    2300014: Cylinder008
+    2300016: light
+    2300018: light001
+    2300020: light001_gate
+    2300022: light001_gate001
+    2300024: liglt_bulb
+    2300026: liglt_bulb001
+    2300028: liglt_bulb002
+    2300030: Piece_flo
+    2300032: Piece_flo001
+    2300034: Swing_light
+    2300036: Swing_light001
+    3300000: Cylinder001
+    3300002: Cylinder002
+    3300004: Cylinder003
+    3300006: Cylinder004
+    3300008: Cylinder005
+    3300010: Cylinder006
+    3300012: Cylinder007
+    3300014: Cylinder008
+    3300016: light
+    3300018: light001
+    3300020: light001_gate
+    3300022: light001_gate001
+    3300024: liglt_bulb
+    3300026: liglt_bulb001
+    3300028: liglt_bulb002
+    3300030: Piece_flo
+    3300032: Piece_flo001
+    3300034: Swing_light
+    3300036: Swing_light001
+    4300000: Swing_light
+    4300002: Swing_light001
+    4300004: liglt_bulb002
+    4300006: liglt_bulb
+    4300008: liglt_bulb001
+    4300010: light
+    4300012: Piece_flo
+    4300014: light001_gate
+    4300016: Cylinder001
+    4300018: Cylinder002
+    4300020: Cylinder003
+    4300022: Cylinder004
+    4300024: Piece_flo001
+    4300026: light001
+    4300028: light001_gate001
+    4300030: Cylinder006
+    4300032: Cylinder008
+    4300034: Cylinder005
+    4300036: Cylinder007
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

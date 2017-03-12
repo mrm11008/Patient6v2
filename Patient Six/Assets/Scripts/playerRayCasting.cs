@@ -20,6 +20,7 @@ public class playerRayCasting : MonoBehaviour {
     public AudioSource puzzleinvest;
     public AudioSource medinvest;
     public AudioSource otherdoorinvest;
+    public AudioSource clipSound;
     //clipboard showing
     bool clipShowing = false;
     //puzzle showing
@@ -27,7 +28,13 @@ public class playerRayCasting : MonoBehaviour {
     public GameObject puzzleUI;
     public GameObject mechUI;
     public GameObject singlemech;
+	public GameObject investigate;
+    //public GameObject singlemech2;
     public PausedState paused;
+    //cabinet animation
+    public Animator cabinet;
+    public Collider cdoorCol;
+    public bool cabinetOpen = false;
 
     public float distanceToSee;
 	RaycastHit whatIHit;
@@ -37,6 +44,13 @@ public class playerRayCasting : MonoBehaviour {
 
 	public CharacterSounds audso;
 
+	public bool isTutorial = false;
+	public bool checkCassette = false;
+	public bool checkMed = false;
+	public bool checkHide = false;
+	public bool checkClip = false;
+	public bool openDoor = false;
+
 	// Use this for initialization
 	void Start () {
 		audso = GetComponentInParent<CharacterSounds> ();
@@ -45,6 +59,17 @@ public class playerRayCasting : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		//check to see if this is the tutorial
+		isTutorial = GM.instance.GetTutorialCheck();
+		if (isTutorial == true) {
+			//check list
+		}
+		if (checkCassette == true && checkMed == true && checkHide == true && checkClip == true) {
+			Debug.Log ("OPEN ZEE DOOR!!!");
+
+			openDoor = true;
+		}
+
 		Debug.DrawRay (this.transform.position, this.transform.forward * distanceToSee, Color.blue);
 		touching = false;
 		if (Physics.Raycast (this.transform.position, this.transform.forward, out whatIHit, distanceToSee)) {
@@ -64,25 +89,39 @@ public class playerRayCasting : MonoBehaviour {
             //check if medicine
             Medicine m = whatIHit.collider.GetComponent<Medicine>();
 
+            //check if cabinet
+            Cabinet c = whatIHit.collider.GetComponent<Cabinet>();
+
+			//check if hidingspot
+			HidingSpot hidingSpot = whatIHit.collider.GetComponent<HidingSpot>();
+
             if (paused.GetPausedState())
             {
                 mechUI.SetActive(false);
                 singlemech.SetActive(false);
+				investigate.SetActive (false);
+                //singlemech2.SetActive(false);
             }
             else
             {
-                if (p != null || m != null || od != null)
-                {
-                    mechUI.SetActive(true);
-                }
-                else if(clip != null || cp != null)
-                {
-                    singlemech.SetActive(true);
-                }
+				if (p != null || m != null || od != null) {
+					mechUI.SetActive (true);
+				}
+                //interact only
+                else if (clip != null || cp != null || c != null) {
+					singlemech.SetActive (true);
+				} else if (hidingSpot != null) {
+					investigate.SetActive (true);
+				}
+                //else if (c != null)
+                //{
+                //    singlemech2.SetActive(true);
+                //}
                 else
                 {
                     mechUI.SetActive(false);
                     singlemech.SetActive(false);
+					investigate.SetActive (false);
                 }
                        
             }
@@ -112,15 +151,33 @@ public class playerRayCasting : MonoBehaviour {
                 {
                     otherdoorinvest.Play();
                 }
+				if (hidingSpot != null) {
+					print ("HIDING SPOT CHECK");
+					audso.PlayInvestigateHiding ();
+					checkHide = true;
+
+				}
+
             }
+
+
 
             if (Input.GetKeyDown(KeyCode.E))
             {
+                if (c != null)
+                {
+                    checkMed = true;
+                    Debug.Log("MED CHECK");
+                    whatIHit.collider.gameObject.GetComponent<Cabinet>().OpenCabinet();
+                }
 
                 if (clipShowing == false)
                 {
-                    if (clipMatch != null)
-                    {
+                    if (clipMatch != null) { 
+
+                        Debug.Log("CLIP CHECK");
+                        checkClip = true;
+                        clipSound.Play();
                         clipboardUI.SetActive(true);
                         clipMatch.boardIMG.SetActive(true);
                         activeImage = clipMatch.boardIMG;
@@ -211,10 +268,13 @@ public class playerRayCasting : MonoBehaviour {
 
 
 				}
+					
+
 
 				if (whatIHit.collider.tag == "Clipboard") { 
 
 					if (whatIHit.collider.gameObject.GetComponent<InteractionObjects> ().whatObjAmI == InteractionObjects.InteractType.clipboard) {
+
 						GM.instance.displayClipBoard ();
 						audso.playPickUpClip();
 					}
@@ -223,6 +283,9 @@ public class playerRayCasting : MonoBehaviour {
 				if (whatIHit.collider.name == "Casette Player 6") { 
 
 					if (whatIHit.collider.gameObject.GetComponent<InteractionObjects> ().whatObjAmI == InteractionObjects.InteractType.cassette) {
+						Debug.Log ("CASSETTE CHECK");
+
+						checkCassette = true;
 						GM.instance.accessCassetteSix ();
 //						GM.instance.startSoundMeter ();
 					}
@@ -263,10 +326,24 @@ public class playerRayCasting : MonoBehaviour {
 		} else {
 			touching = false;
 		}
-		if (touching = false) {
+		if (touching == false) {
 			GM.instance.hideMoveMed ();
 		}
 
 
 	}
+
+
+
+	void OnTriggerEnter(Collider other) {
+
+		if (other.gameObject.tag == "Hide") {
+
+			checkHide = true;
+			Debug.Log ("HIDE CHECK");
+		}
+	}
+
+
+
 }

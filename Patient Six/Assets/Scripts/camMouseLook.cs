@@ -10,7 +10,8 @@ public class camMouseLook : MonoBehaviour {
 
 	public float smoothing = 2.0f;
     public PausedState paused;
-
+    public GameObject pausedScreen;
+    public bool PauseisShowing = false;
     GameObject character;
 
 	// Use this for initialization
@@ -33,6 +34,7 @@ public class camMouseLook : MonoBehaviour {
 
             transform.localRotation = Quaternion.AngleAxis(-mouseLook.y, Vector3.right);
             character.transform.localRotation = Quaternion.AngleAxis(mouseLook.x, character.transform.up);
+
         }
 
 	}

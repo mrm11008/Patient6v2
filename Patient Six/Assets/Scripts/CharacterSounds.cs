@@ -9,6 +9,7 @@ public class CharacterSounds : MonoBehaviour {
 	public AudioClip takeItem;
 	public AudioClip footsteps;
 	public AudioClip getOut;
+    public AudioClip hospitalsound;
 
 	public AudioClip movementInversion1;
 	public AudioClip movementInversion2;
@@ -22,6 +23,7 @@ public class CharacterSounds : MonoBehaviour {
 
 	public AudioClip lowSound;
 
+	public AudioClip hidingSpot;
 
 	// Use this for initialization
 	void Start () {
@@ -34,7 +36,12 @@ public class CharacterSounds : MonoBehaviour {
 		audiosource.PlayOneShot (pickUp);
 	}
 
-	public void playTakeItem() {
+    public void playHospital()
+    {
+        audiosource.PlayOneShot(hospitalsound);
+    }
+
+    public void playTakeItem() {
 		audiosource.PlayOneShot (takeItem);
 	}
 	public void playFootsteps() {
@@ -90,6 +97,10 @@ public class CharacterSounds : MonoBehaviour {
 
 		print ("TOO LOUD");
 		audiosource.PlayOneShot (lowSound);
+	}
+
+	public void PlayInvestigateHiding() {
+		audiosource.PlayOneShot (hidingSpot);
 	}
 
 }

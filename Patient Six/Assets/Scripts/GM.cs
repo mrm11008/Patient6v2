@@ -17,16 +17,21 @@ public class GM : MonoBehaviour {
 	private Vector3 robotPosition = new Vector3 (14f, 1f, 86f);
 	public bool playerDarted;
 
-	//Meter Values
-	public Text movementMeter;
-	public Text soundMeter;
-	public Text visionMeter;
-	public Text lightMeter;
+    //Meter Values
+    public Sprite[] soundStates;
+    public Sprite[] moveStates;
+    public Sprite[] lightStates;
+    public Image activeSound;
+    public Image activeMovement;
+    public Image activeLight;
 
     //UI Screens
     public GameObject startUI;
     public GameObject controlsUI;
     public GameObject crosshair;
+	public GameObject tutorialUI;
+    public GameObject pausedUI;
+    private bool pauseShowing;
 
     //Cameras
     public Camera PlayerCam;
@@ -87,6 +92,17 @@ public class GM : MonoBehaviour {
 
 	public bool isChasing = false;
 	public bool levelThreeSound = false;
+	public bool reset = false;
+
+	//TUTORIAL CODE
+	public bool hasPlayedTut = false;
+	public bool checkCassette = false;
+	public bool checkMed = false;
+	public bool checkHide = false;
+	public bool checkClip = false;
+	public int tutCount = 0;
+	public bool tutorialRun = false;
+    public Animator tutDoor;
 
 	void Awake() {
 //		clonePlayer = Instantiate (playerPrefab, playerPosition, Quaternion.identity) as GameObject;
@@ -100,18 +116,65 @@ public class GM : MonoBehaviour {
 	}
 	// Use this for initialization
 	void Start () {
-        
-        PlayerCam.enabled = false;
-		StartScreen.enabled = true;
+		if (reset == false) {
+			PlayerCam.enabled = false;
+			StartScreen.enabled = true;
+		} else {
+			PlayerCam.enabled = true;
+		}
+		reset = false;
+
+        //Active Functionality
+
+	}
+
+	public void TutorialScreen() {
+		tutorialUI.SetActive (true);
+
+	}
+
+	public void LaunchTutorial() {
+		Application.LoadLevel ("Patient6_v2");
+	}
+
+    public void BacktoStart()
+    {
+        Application.LoadLevel("Patient6_v1");
+    }
+
+    void Tutorial() {
+
+		if (hasPlayedTut == false) {
+			//ask if the player wants to play the tutorial?
+			//if yes
+			tutorialRun = true;
+			Application.LoadLevel ("Patient6_v2");
+		} 
+
+	}
+
+	public bool GetTutorialCheck () {
+		return tutorialRun;
+	}
+
+	void TutorialCheck() {
+		//make sure the player checks out all the required items before unlocking the door
+		if (checkCassette == true && checkMed == true && checkClip == true) {
+            //trigger that opens door!
+            //set Tutorial Door to active and uncheck Door RM 6 [until we integrate into both scenes]
+            tutDoor.SetTrigger("tutFinished");
+		}
 
 	}
 
 	public void Setup() {
-
+        activeSound.sprite = soundStates[0];
+        activeMovement.sprite = moveStates[0];
+        activeLight.sprite = lightStates[0];
         robotPrefab.SetActive(true);
 		Time.timeScale = 1.0f;
         //Instantiate player and Robot
-        //		cloneRobot = Instantiate (robotPrefab, robotPosition, Quaternion.identity) as GameObject;
+        //cloneRobot = Instantiate (robotPrefab, robotPosition, Quaternion.identity) as GameObject;
         //Switch Camera
         PlayerCam.enabled = true;
         StartScreen.enabled = false;
@@ -127,7 +190,11 @@ public class GM : MonoBehaviour {
 
     public void ResetGame()
     {
+		reset = true;
         Reset();
+		Time.timeScale = 1f;
+		Application.LoadLevel ("Patient6_v2");
+
     }
 
 	void Reset() {
@@ -175,6 +242,24 @@ public class GM : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+        if (Input.GetKeyDown("escape"))
+        {
+            if (pauseShowing == false)
+            {
+                pausedUI.SetActive(true);
+                Time.timeScale = 0f;
+                pauseShowing = true;
+                Cursor.lockState = CursorLockMode.None;
+            }
+            else
+            {
+                pausedUI.SetActive(false);
+                Time.timeScale = 1f;
+                pauseShowing = false;
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+        }
+
         //if camera is start screen, show start UI
         if (StartScreen.enabled == true)
         {
@@ -185,6 +270,7 @@ public class GM : MonoBehaviour {
         else
         {
             startUI.SetActive(false);
+			tutorialUI.SetActive (false);
             crosshair.SetActive(true);
         }
 
@@ -210,24 +296,33 @@ public class GM : MonoBehaviour {
 
 		//------------------------------------SOUND METER LEVEL CHECK--------------------------
 		if (sMeter.getSoundValue () <= 100 && sMeter.getSoundValue () > 75) {
-			playSoundCountNew = 0;
-//			playSound = true;
+            playSoundCountNew = 0;
+            //			playSound = true;
 
-		}
+            //Brain
+            activeSound.sprite = soundStates[0];
+        }
 		if (sMeter.getSoundValue () < 75 && sMeter.getSoundValue () > 50) {
-			playSoundCountNew = 1;
-//			playSound = true;
+            playSoundCountNew = 1;
+            //			playSound = true;
 
-
-		}
+            //Brain
+            activeSound.sprite = soundStates[1];
+        }
 		if (sMeter.getSoundValue () < 50 && sMeter.getSoundValue () > 25) {
 			playSoundCountNew = 2;
-//			playSound = true;
+            //			playSound = true;
 
+            //Brain
+            activeSound.sprite = soundStates[2];
+        }
 
-		}
+        if (sMeter.getSoundValue() < 25 && sMeter.getSoundValue() >= 0)
+        {
+            activeSound.sprite = soundStates[3];
+        }
 
-		if (playSoundCount == playSoundCountNew) {
+        if (playSoundCount == playSoundCountNew) {
 
 		} else if (playSoundCountNew == 0) {
 			playLevelOneSound ();
@@ -250,48 +345,60 @@ public class GM : MonoBehaviour {
 		GameObject.Find ("GM").GetComponent<FadingLight> ().BeginFade (1, alphaValues);
 
 		//------------------------------------LIGHT METER LEVEL CHECK--------------------------
-//		if (lMeter.getLightValue () <= 100 && lMeter.getLightValue () > 75) {
-//			lightCountNew = 0;
-////			float fadeTime = GameObject.Find ("GM").GetComponent<Fading> ().BeginFade (-1, 1.0);
-////			GameObject.Find ("GM").GetComponent<FadingLight> ().BeginFade (-1);
-//		}
-//		if (lMeter.getLightValue () < 75 && lMeter.getLightValue () > 50) {
-//			lightCountNew = 1;
-////			float fadeTime = GameObject.Find ("GM").GetComponent<Fading> ().BeginFade (1, 0.75);
-////			GameObject.Find ("GM").GetComponent<Fading> ().BeginFade (1, 1);
-////			GameObject.Find ("GM").GetComponent<FadingLight> ().BeginFade (1, 0.2f);
-//			Debug.Log ("FADE!!!!!!!");
-//		}
-//		if (lMeter.getLightValue () < 50 && lMeter.getLightValue () > 25) {
-//			lightCountNew = 2;
-//		}
-//
-//		if (lightCount == lightCountNew) {
-//
-//		} else if (lightCountNew == 0) {
-//			lightLevelOne ();
-//			lightCount = 0;
-//		} else if (lightCountNew == 1) {
-//			lightLevelTwo ();
-//			lightCount = 1;
-//		} else if (lightCountNew == 2) {
-//			lightLevelThree ();
-//			lightCount = 2;
-//		}
-		//------------------------------------MOVEMENT METER LEVEL CHECK--------------------------
-		if (mMeter.getMovementValue () <= 100 && mMeter.getMovementValue () > 75) {
+		if (lMeter.getLightValue () <= 100 && lMeter.getLightValue () > 75) {
+            activeLight.sprite = lightStates[0];
+        }
+		if (lMeter.getLightValue () < 75 && lMeter.getLightValue () > 50) {
+            activeLight.sprite = lightStates[1];
+        }
+		if (lMeter.getLightValue () < 50 && lMeter.getLightValue () > 25) {
+            activeLight.sprite = lightStates[2];
+        }
+        if (lMeter.getLightValue() < 25 && lMeter.getLightValue() >= 0)
+        {
+            activeLight.sprite = lightStates[3];
+        }
+
+        //		if (lightCount == lightCountNew) {
+        //
+        //		} else if (lightCountNew == 0) {
+        //			lightLevelOne ();
+        //			lightCount = 0;
+        //		} else if (lightCountNew == 1) {
+        //			lightLevelTwo ();
+        //			lightCount = 1;
+        //		} else if (lightCountNew == 2) {
+        //			lightLevelThree ();
+        //			lightCount = 2;
+        //		}
+        //------------------------------------MOVEMENT METER LEVEL CHECK--------------------------
+        if (mMeter.getMovementValue () <= 100 && mMeter.getMovementValue () > 75) {
 //			Debug.Log ("MLEVEL ONE");
 			movementLevelOne ();
 			moveLevelCountNew = 1;
-		}
+
+            //Brain
+            activeMovement.sprite = moveStates[0];
+        }
 		if (mMeter.getMovementValue () < 75 && mMeter.getMovementValue () > 50) {
 			moveLevelCountNew = 2;
-		}
+
+            //Brain
+            activeMovement.sprite = moveStates[1];
+        }
 		if (mMeter.getMovementValue () < 50 && mMeter.getMovementValue () > 25) {
 			moveLevelCountNew = 3;
 
-		}
-		if (movLevelCount == moveLevelCountNew) {
+            //Brain
+            activeMovement.sprite = moveStates[2];
+        }
+
+        if (mMeter.getMovementValue() < 25 && mMeter.getMovementValue() >= 0)
+        {
+            //Brain
+            activeMovement.sprite = moveStates[3];
+        }
+        if (movLevelCount == moveLevelCountNew) {
 
 		} else if (moveLevelCountNew == 1) {
 //			movementLevelOne ();
@@ -370,7 +477,7 @@ public class GM : MonoBehaviour {
 		soundLevelOne.Play ();
 		stopLevelTwoSound ();
 		stopLevelThreeSound ();
-	}
+    }
 
 	public void playLevelTwoSound() {
 		Debug.Log ("PLAY LEVEL 2 SOUND");
@@ -378,7 +485,7 @@ public class GM : MonoBehaviour {
 		soundLevelTwo.Play ();
 		stopLevelOneSound ();
 		stopLevelThreeSound ();
-	}
+    }
 
 	public void playLevelThreeSound() {
 		Debug.Log ("PLAY LEVEL 3 SOUND");
@@ -386,7 +493,7 @@ public class GM : MonoBehaviour {
 		soundLevelThree.Play ();
 		stopLevelOneSound ();
 		stopLevelTwoSound ();
-	}
+    }
 	public bool LevelThreeSoundCheck() {
 		return levelThreeSound;
 	}

@@ -197,6 +197,7 @@ public class characterController : MonoBehaviour {
 		if (other.gameObject.tag == "Hide") {
 
 			hidden = true;
+
 			Debug.Log ("PLAYER IS HIDING");
 		}
 	}
