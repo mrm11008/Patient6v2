@@ -57,7 +57,9 @@ public class MovementMeter : MonoBehaviour {
 
 	}
 
-
+	public void TutorialSet() {
+		movementFloat = 75;
+	}
 
 
 	public bool movementSwitch() {

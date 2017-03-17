@@ -31,7 +31,13 @@ public class LightMeter : MonoBehaviour {
 	void decrementLight() {
 //		Debug.Log ("DECREMENT");
 		lightFloat = lightFloat - decrementValue;
-		alphaFloat += 0.008f;
+//		alphaFloat += 0.008f;
+		if (decrementValue == 0) {
+
+		} else {
+			alphaFloat += 0.01f;
+		}
+
 //		Debug.Log (li);
 	}
 	public void incrementLight() {
@@ -41,10 +47,16 @@ public class LightMeter : MonoBehaviour {
 			} else {
 				lightFloat = lightFloat + 25;
 				//HAVE TO CHECK TO MAKE SURE IT ISNT BELOW 0
-				if ((alphaFloat - 0.2f) <= 0f) {
+//				if ((alphaFloat - 0.2f) <= 0f) {
+//					alphaFloat = 0f;
+//				} else {
+//					alphaFloat -= 0.2f;
+//				}
+
+				if ((alphaFloat - 0.25f) <= 0f) {
 					alphaFloat = 0f;
 				} else {
-					alphaFloat -= 0.2f;
+					alphaFloat -= 0.25f;
 				}
 
 			}
@@ -52,12 +64,17 @@ public class LightMeter : MonoBehaviour {
 
 	}
 
+	public void TutorialSet() {
+		lightFloat = 75;
+	}
 
 	public void dartDecrementLight() {
 		if (lightFloat - 50 <= 0) {
 			lightFloat = 0;
+			alphaFloat -= 0.5f;
 		} else {
 			lightFloat = lightFloat - 50;
+			alphaFloat -= 0.5f;
 		}
 	}
 

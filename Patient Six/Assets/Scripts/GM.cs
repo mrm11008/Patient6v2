@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GM : MonoBehaviour {
 
@@ -8,6 +9,7 @@ public class GM : MonoBehaviour {
 	public GameObject gameOver;
 	public GameObject playerPrefab;
 	public GameObject robotPrefab;
+    public GameObject fadeinLevel;
 
 	//Player and Robot objects
 	private GameObject clonePlayer;
@@ -16,6 +18,9 @@ public class GM : MonoBehaviour {
 	private Vector3 playerPosition = new Vector3 (19.5f, 1.0f, 68.0f);
 	private Vector3 robotPosition = new Vector3 (14f, 1f, 86f);
 	public bool playerDarted;
+    public int dartCount = 0;
+    public GameObject hideHint;
+    public Animation hideHintAnim;
 
     //Meter Values
     public Sprite[] soundStates;
@@ -47,17 +52,16 @@ public class GM : MonoBehaviour {
 	public bool lSwitch = false;
 
 	//Movement Variables
-	public GameObject movementMed;
 	public float movementMeterValue = 100;
 	public float decrementMovement = 1;
 	public float incrementMovement = 25;
 	public bool invertMovement = false;
-	public float movementTimerOne = 20.0f;
-	public float movementTimerTwo = 15.0f;
+	public float movementTimerOne = 30.0f;
+	public float movementTimerTwo = 20.0f;
 	public float movementTimerThree = 10.0f;
-	public float movementTimerOneInvert = 5.0f;
-	public float movementTimerTwoInvert = 10.0f;
-	public float movementTimerThreeInvert = 15.0f;
+	public float movementTimerOneInvert = 3.0f;
+	public float movementTimerTwoInvert = 5.0f;
+	public float movementTimerThreeInvert = 10.0f;
 	public int movLevelCount = 1;
 	public int moveLevelCountNew = 1;
 	//develop a timer that will tic every x seconds, decrease the movement meter
@@ -104,6 +108,15 @@ public class GM : MonoBehaviour {
 	public bool tutorialRun = false;
     public Animator tutDoor;
 
+    //END
+    public GameObject endCheck;
+
+	//TIME TRIGGERS
+	public float movementTriggerTimer = 30.0f;
+	public float lightTriggerTimer = 60.0f;
+
+	public bool tutorialCheckBool = false;
+
 	void Awake() {
 //		clonePlayer = Instantiate (playerPrefab, playerPosition, Quaternion.identity) as GameObject;
 
@@ -116,30 +129,39 @@ public class GM : MonoBehaviour {
 	}
 	// Use this for initialization
 	void Start () {
-		if (reset == false) {
-			PlayerCam.enabled = false;
-			StartScreen.enabled = true;
-		} else {
-			PlayerCam.enabled = true;
-		}
-		reset = false;
+        //Check Scene
+        Scene currentScene = SceneManager.GetActiveScene();
+        string sceneName = currentScene.name;
+
+        if (sceneName == "StartTutorial")
+        {
+            PlayerCam.enabled = false;
+            StartScreen.enabled = true;
+        }
+        else
+        {
+            Setup();
+        }
+
+        reset = false;
 
         //Active Functionality
+        
+    }
 
-	}
-
-	public void TutorialScreen() {
+    public void TutorialScreen() {
 		tutorialUI.SetActive (true);
 
 	}
 
 	public void LaunchTutorial() {
-		Application.LoadLevel ("Patient6_v2");
+		Application.LoadLevel ("StartTutorial");
 	}
 
     public void BacktoStart()
     {
-        Application.LoadLevel("Patient6_v1");
+        Application.LoadLevel("StartTutorial");
+        Time.timeScale = 1f;
     }
 
     void Tutorial() {
@@ -148,29 +170,38 @@ public class GM : MonoBehaviour {
 			//ask if the player wants to play the tutorial?
 			//if yes
 			tutorialRun = true;
-			Application.LoadLevel ("Patient6_v2");
+			Application.LoadLevel ("StartTutorial");
 		} 
 
+	}
+
+	public void LoadGame() {
+		Application.LoadLevel("StartTutorial");
 	}
 
 	public bool GetTutorialCheck () {
 		return tutorialRun;
 	}
 
-	void TutorialCheck() {
+	public void TutorialCheck() {
 		//make sure the player checks out all the required items before unlocking the door
-		if (checkCassette == true && checkMed == true && checkClip == true) {
+		if (checkCassette == true && checkMed == true && checkClip == true && checkHide == true) {
             //trigger that opens door!
             //set Tutorial Door to active and uncheck Door RM 6 [until we integrate into both scenes]
             tutDoor.SetTrigger("tutFinished");
-		}
 
+		}
+		tutDoor.SetTrigger("tutFinished");
 	}
 
 	public void Setup() {
-        activeSound.sprite = soundStates[0];
-        activeMovement.sprite = moveStates[0];
-        activeLight.sprite = lightStates[0];
+        //float fadeTime = GameObject.Find("GM").GetComponent<Fading>().BeginFade(-1);
+		if (tutorialCheckBool == true) {
+			mMeter.TutorialSet ();
+			lMeter.TutorialSet ();
+			sMeter.TutorialSet ();
+		}
+        fadeinLevel.SetActive(true);
         robotPrefab.SetActive(true);
 		Time.timeScale = 1.0f;
         //Instantiate player and Robot
@@ -185,29 +216,28 @@ public class GM : MonoBehaviour {
 		soundLevelTwo = audiosources [1];
 		soundLevelThree = audiosources [2];
 		playLevelOneSound ();
-
-	}
+        
+    }
 
     public void ResetGame()
     {
 		reset = true;
         Reset();
 		Time.timeScale = 1f;
-		Application.LoadLevel ("Patient6_v2");
+		Application.LoadLevel ("MainGame");
 
     }
 
 	void Reset() {
 		Time.timeScale = 1f;
-        Application.LoadLevel (Application.loadedLevel);
+//        Application.LoadLevel (Application.loadedLevel);
+		Application.LoadLevel ("MainGame");
+
     }
 
 	public void GameOver() {
-
 		gameOver.SetActive (true);
 		Time.timeScale = .1f;
-        Cursor.lockState = CursorLockMode.None;
-
     }
 
 	public void dartReset() {
@@ -217,7 +247,9 @@ public class GM : MonoBehaviour {
 //		GameObject.Find ("GM").GetComponent<Fading> ().BeginFade (1, 1);
 		Invoke ("replacePlayer", 1.0f);
 		Invoke("replaceRobot" , 1.0f);
-	}
+        showHidingHint();
+    }
+
 
 	void replacePlayer() {
 		Time.timeScale = 1f;
@@ -225,7 +257,7 @@ public class GM : MonoBehaviour {
 //		GameObject.Find ("GM").GetComponent<Fading> ().BeginFade (-1, 1);
 		playerPrefab.transform.position = playerPosition;
 
-	}
+    }
 
 	void replaceRobot() {
 		//change inSight to false
@@ -237,26 +269,56 @@ public class GM : MonoBehaviour {
 //		robotPrefab.gameObject.GetComponent<RobotMovement>().toggleInSight();
 //		hidden = true;
 		robotPrefab.GetComponent<RobotController>().dartReset();
-	}
+    }
 
 	// Update is called once per frame
 	void Update () {
+        
+		//METER TIME TRIGGERS
+		if (sSwitch == true) {
+			movementTriggerTimer -= Time.deltaTime;
+			lightTriggerTimer -= Time.deltaTime;
+            //activeSound.sprite = soundStates[0];
+        }
+
+		if (movementTriggerTimer <= 0) {
+			mSwitch = true;
+            //activeMovement.sprite = moveStates[0];
+        }
+		if (lightTriggerTimer <= 0) {
+            activeLight.sprite = lightStates[0];
+            lSwitch = true;
+		}
+
+        if (gameOver.activeSelf)
+        {
+            Cursor.lockState = CursorLockMode.None;
+        }
 
         if (Input.GetKeyDown("escape"))
         {
-            if (pauseShowing == false)
+            if (endCheck.gameObject.GetComponent<playerRayCasting>().endPlaying == false)
             {
-                pausedUI.SetActive(true);
-                Time.timeScale = 0f;
-                pauseShowing = true;
-                Cursor.lockState = CursorLockMode.None;
+                if (pauseShowing == false)
+                {
+                    pausedUI.SetActive(true);
+                    Time.timeScale = 0f;
+                    pauseShowing = true;
+                    Cursor.visible = true;
+                    Cursor.lockState = CursorLockMode.None;
+                }
+                else
+                {
+                    pausedUI.SetActive(false);
+                    Time.timeScale = 1f;
+                    pauseShowing = false;
+                    Cursor.visible = false;
+                    Cursor.lockState = CursorLockMode.Locked;
+                }
             }
             else
             {
-                pausedUI.SetActive(false);
-                Time.timeScale = 1f;
-                pauseShowing = false;
-                Cursor.lockState = CursorLockMode.Locked;
+
             }
         }
 
@@ -276,8 +338,9 @@ public class GM : MonoBehaviour {
 
         if (playerDarted == true) {
 			dartReset ();
-//			Invoke ("dartReset", 1.0f);
-			playerDarted = false;
+            //Invoke ("dartReset", 1.0f);
+            playerDarted = false;
+            showHidingHint();
 		}
 		//MOVEMENT CHECKS
 		if (mSwitch == true) {
@@ -294,15 +357,21 @@ public class GM : MonoBehaviour {
 			lMeter.gameObject.SetActive (true);
 		}
 
-		//------------------------------------SOUND METER LEVEL CHECK--------------------------
-		if (sMeter.getSoundValue () <= 100 && sMeter.getSoundValue () > 75) {
+        //------------------------------------SOUND METER LEVEL CHECK--------------------------
+        if (sMeter.getSoundValue() <= 100 && sSwitch == false)
+        {
+            //Brain
+            activeSound.sprite = soundStates[4];
+        }
+
+        if (sMeter.getSoundValue () <= 100 && sMeter.getSoundValue () > 75 && sSwitch == true) {
             playSoundCountNew = 0;
             //			playSound = true;
 
             //Brain
             activeSound.sprite = soundStates[0];
         }
-		if (sMeter.getSoundValue () < 75 && sMeter.getSoundValue () > 50) {
+		if (sMeter.getSoundValue () <= 75 && sMeter.getSoundValue () > 50) {
             playSoundCountNew = 1;
             //			playSound = true;
 
@@ -340,15 +409,29 @@ public class GM : MonoBehaviour {
 			GameOver ();
 //			Reset ();
 		}
+		if (lMeter.getLightValue () <= 0) {
+			Debug.Log ("LIGHT METER LOW");
+			GameOver ();
+			//			Reset ();
+		}
+		if (mMeter.getMovementValue () <= 0) {
+			Debug.Log ("MOVEMENT METER LOW");
+			GameOver ();
+			//			Reset ();
+		}
 
 		alphaValues = lMeter.getAlphaValue ();
 		GameObject.Find ("GM").GetComponent<FadingLight> ().BeginFade (1, alphaValues);
 
-		//------------------------------------LIGHT METER LEVEL CHECK--------------------------
-		if (lMeter.getLightValue () <= 100 && lMeter.getLightValue () > 75) {
+        //------------------------------------LIGHT METER LEVEL CHECK--------------------------
+        if (lMeter.getLightValue() == 100 && lSwitch == false)
+        {
+            activeLight.sprite = lightStates[4];
+        }
+        if (lMeter.getLightValue () <= 100 && lMeter.getLightValue () > 75 && lSwitch == true) {
             activeLight.sprite = lightStates[0];
         }
-		if (lMeter.getLightValue () < 75 && lMeter.getLightValue () > 50) {
+		if (lMeter.getLightValue () <= 75 && lMeter.getLightValue () > 50) {
             activeLight.sprite = lightStates[1];
         }
 		if (lMeter.getLightValue () < 50 && lMeter.getLightValue () > 25) {
@@ -372,29 +455,38 @@ public class GM : MonoBehaviour {
         //			lightCount = 2;
         //		}
         //------------------------------------MOVEMENT METER LEVEL CHECK--------------------------
-        if (mMeter.getMovementValue () <= 100 && mMeter.getMovementValue () > 75) {
-//			Debug.Log ("MLEVEL ONE");
-			movementLevelOne ();
-			moveLevelCountNew = 1;
-
+        if (mMeter.getMovementValue() == 100 && mSwitch == false)
+        {
+            //Brain
+            activeMovement.sprite = moveStates[4];
+        }
+        if (mMeter.getMovementValue () <= 100 && mMeter.getMovementValue () > 75 && mSwitch == true) {
             //Brain
             activeMovement.sprite = moveStates[0];
         }
-		if (mMeter.getMovementValue () < 75 && mMeter.getMovementValue () > 50) {
-			moveLevelCountNew = 2;
+		if (mMeter.getMovementValue () <= 75 && mMeter.getMovementValue () > 50) {
+			Debug.Log ("MLEVEL ONE");
+			movementLevelOne ();
+			moveLevelCountNew = 1;
 
             //Brain
             activeMovement.sprite = moveStates[1];
         }
 		if (mMeter.getMovementValue () < 50 && mMeter.getMovementValue () > 25) {
-			moveLevelCountNew = 3;
+			moveLevelCountNew = 2;
+			Debug.Log ("MLEVEL TWO");
 
+			movementLevelTwo ();
             //Brain
             activeMovement.sprite = moveStates[2];
         }
 
         if (mMeter.getMovementValue() < 25 && mMeter.getMovementValue() >= 0)
         {
+			Debug.Log ("MLEVEL THREE");
+
+			moveLevelCountNew = 3;
+			movementLevelThree ();
             //Brain
             activeMovement.sprite = moveStates[3];
         }
@@ -413,11 +505,17 @@ public class GM : MonoBehaviour {
 
 	}
 
+    //Hide Hint
+    public void showHidingHint()
+    {
+        hideHintAnim.Play();
+    }
+
 	//---------------------------------METER CODE---------------------------------------
 	public void startSoundMeter() {
 		sSwitch = true;
-		lSwitch = true;
-		mSwitch = true;
+//		lSwitch = true;
+//		mSwitch = true;
 	}
 
 	//---------------------------------HIDE CODE---------------------------------------
@@ -436,13 +534,6 @@ public class GM : MonoBehaviour {
 
 	//---------------------------------MEDICINE CODE---------------------------------------
 	//MEDICINE UI
-	public void displayMoveMed() {
-
-		movementMed.SetActive (true);
-	}
-	public void hideMoveMed() {
-		movementMed.SetActive (false);
-	}
 	public void displayClipBoard() {
 		isShowing = !isShowing;
 		clipBoard.gameObject.SetActive (isShowing);
@@ -451,9 +542,9 @@ public class GM : MonoBehaviour {
 		clipBoard.gameObject.SetActive (false);
 	}
 	//MEDICINE FUNCTIONALITY
-	public void onTakeMoveMed() {
-		movementMeterValue += incrementMovement;
-	}
+//	public void onTakeMoveMed() {
+//		movementMeterValue += incrementMovement;
+//	}
 	public void decreaseMovement() {
 		movementMeterValue -= decrementMovement;
 	}
@@ -464,7 +555,9 @@ public class GM : MonoBehaviour {
 	public void onTakeLightMed() {
 		lMeter.incrementLight ();
 	}
-
+	public void onTakeMoveMed() {
+		mMeter.incrementMovement ();
+	}
 	//---------------------------------SOUND CODE---------------------------------------
 
 	public void playLevelOneSound() {
@@ -535,17 +628,39 @@ public class GM : MonoBehaviour {
 			invertMovement = true;
 			movementTimerOneInvert -= Time.deltaTime;
 			if (movementTimerOneInvert <= 0) {
-				movementTimerOne = 20.0f;
-				movementTimerOneInvert = 5.0f;
+				movementTimerOne = 30.0f;
+				movementTimerOneInvert = 3.0f;
 				invertMovement = false;
 			}
 		}
 	}
 	public void movementLevelTwo() {
-
+		movementTimerTwo -= Time.deltaTime;
+		//		Debug.Log (movementTimerOne);
+		if (movementTimerTwo <= 0) {
+			Debug.Log ("INVERT!");
+			invertMovement = true;
+			movementTimerTwoInvert -= Time.deltaTime;
+			if (movementTimerTwoInvert <= 0) {
+				movementTimerTwo = 20.0f;
+				movementTimerTwoInvert = 5.0f;
+				invertMovement = false;
+			}
+		}
 	}
 	public void movementLevelThree() {
-
+		movementTimerThree -= Time.deltaTime;
+		//		Debug.Log (movementTimerOne);
+		if (movementTimerThree <= 0) {
+			Debug.Log ("INVERT!");
+			invertMovement = true;
+			movementTimerThreeInvert -= Time.deltaTime;
+			if (movementTimerThreeInvert <= 0) {
+				movementTimerThree = 10.0f;
+				movementTimerThreeInvert = 10.0f;
+				invertMovement = false;
+			}
+		}
 	}
 	public bool getMovementTrigger() {
 		return invertMovement;
@@ -557,10 +672,42 @@ public class GM : MonoBehaviour {
 		//SLOW DOWN MOUSE MOVEMENT ASWELL
 		playerDarted = true;
 
-
 	}
+
+	public void dartPlayerTutorial() {
+		Time.timeScale = 0.25f;
+		float fadeTime = GameObject.Find ("GM").GetComponent<Fading> ().BeginFade (1);
+		//SLOW DOWN MOUSE MOVEMENT ASWELL
+//		playerDarted = true;
+//		Invoke("ResetGame", 1.0f);
+		Invoke("LoadRealGame", 0.7f);
+//		LoadRealGame();
+//		ResetGame();
+	}
+
+
+
+	public void LoadRealGame() {
+		Application.LoadLevel ("MainGame");
+		float fadeTime = GameObject.Find ("GM").GetComponent<Fading> ().BeginFade (-1);
+	}
+
 	public void dartSound() {
-		sMeter.dartDecrementSound ();
+		if (sMeter.isActiveAndEnabled == true) {
+			sMeter.dartDecrementSound ();
+		}
+		if (lMeter.isActiveAndEnabled == true) {
+			lMeter.dartDecrementLight ();
+//			print ("I AM READY LIGHT");
+		} else {
+//			print ("I AM NOT READY light");
+		}
+		if (mMeter.isActiveAndEnabled == true) {
+			mMeter.dartDecrementMovement ();
+//			print ("I AM READY MOVEMENT");
+		} else {
+//			print ("I AM NOT READY MOVEMENT");
+		}
 
 	}
 

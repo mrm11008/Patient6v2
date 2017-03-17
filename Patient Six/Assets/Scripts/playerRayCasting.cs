@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
+using UnityEngine.UI;
 
 public class playerRayCasting : MonoBehaviour {
 
@@ -9,10 +10,14 @@ public class playerRayCasting : MonoBehaviour {
     {
         public Clipboard clip;
         public GameObject boardIMG;
+        public bool wifeBoard = false;
     }
 
     Clipboard clip;
     public List<clipData> clips;
+    public bool isWifeBoard;
+    public bool wifeBoardSeen = false;
+    public bool foundWifeClip = false;
 
     public GameObject clipboardUI;
     private GameObject activeImage;
@@ -31,10 +36,34 @@ public class playerRayCasting : MonoBehaviour {
 	public GameObject investigate;
     //public GameObject singlemech2;
     public PausedState paused;
+    public GameObject hoverCrosshair;
+
     //cabinet animation
     public Animator cabinet;
     public Collider cdoorCol;
     public bool cabinetOpen = false;
+
+    //end variables
+    public Animator buttoncase;
+    public Animator buttonAnim;
+    public Animator cameraShake;
+    public Collider buttonCol;
+    public Collider buttoncaseCol;
+    public GameObject endLight1;
+    public GameObject endLight2;
+    public GameObject endLight3;
+    public GameObject endLight4;
+    public GameObject endLight1model;
+    public GameObject endLight2model;
+    public GameObject endLight3model;
+    public GameObject endLight4model;
+    public AudioSource explosion;
+    public AudioSource seeYou;
+    public bool endPlaying = false;
+    public GameObject whiteScreen;
+    public GameObject endCredits;
+    public GameObject restart;
+    private float endtimer = 0;
 
     public float distanceToSee;
 	RaycastHit whatIHit;
@@ -47,6 +76,10 @@ public class playerRayCasting : MonoBehaviour {
 	public bool isTutorial = false;
 	public bool checkCassette = false;
 	public bool checkMed = false;
+	public bool checkMedLight = false;
+	public bool checkMedSound = false;
+	public bool checkMedMove = false;
+
 	public bool checkHide = false;
 	public bool checkClip = false;
 	public bool openDoor = false;
@@ -55,6 +88,8 @@ public class playerRayCasting : MonoBehaviour {
 	void Start () {
 		audso = GetComponentInParent<CharacterSounds> ();
         //		audso = this.gameObject.GetComponent<CharacterSounds> ();
+        buttoncase.GetComponent<Animator>();
+
     }
 	
 	// Update is called once per frame
@@ -64,12 +99,12 @@ public class playerRayCasting : MonoBehaviour {
 		if (isTutorial == true) {
 			//check list
 		}
-		if (checkCassette == true && checkMed == true && checkHide == true && checkClip == true) {
+		if (checkCassette == true && checkMedMove == true && checkMedLight == true && checkMedSound == true && checkClip == true) {
 			Debug.Log ("OPEN ZEE DOOR!!!");
-
+			GM.instance.TutorialCheck ();
 			openDoor = true;
 		}
-
+        Debug.Log(clipShowing);
 		Debug.DrawRay (this.transform.position, this.transform.forward * distanceToSee, Color.blue);
 		touching = false;
 		if (Physics.Raycast (this.transform.position, this.transform.forward, out whatIHit, distanceToSee)) {
@@ -88,12 +123,26 @@ public class playerRayCasting : MonoBehaviour {
 
             //check if medicine
             Medicine m = whatIHit.collider.GetComponent<Medicine>();
+            //or fake med (tutorial)
+            FakeMedicine fm = whatIHit.collider.GetComponent<FakeMedicine>();
 
             //check if cabinet
             Cabinet c = whatIHit.collider.GetComponent<Cabinet>();
 
 			//check if hidingspot
 			HidingSpot hidingSpot = whatIHit.collider.GetComponent<HidingSpot>();
+
+            //check if buttoncase
+            ButtonCase bc = whatIHit.collider.GetComponent<ButtonCase>();
+
+            //check if button
+            ButtonEnd button = whatIHit.collider.GetComponent<ButtonEnd>();
+            
+            //check if brain
+            Brain brain = whatIHit.collider.GetComponent<Brain>();
+
+            //check if parasite
+            Parasite parasite = whatIHit.collider.GetComponent<Parasite>();
 
             if (paused.GetPausedState())
             {
@@ -106,13 +155,16 @@ public class playerRayCasting : MonoBehaviour {
             {
 				if (p != null || m != null || od != null) {
 					mechUI.SetActive (true);
+                    hoverCrosshair.SetActive(true);
 				}
                 //interact only
-                else if (clip != null || cp != null || c != null) {
+                else if (clip != null || cp != null || c != null || bc != null || button != null) {
 					singlemech.SetActive (true);
-				} else if (hidingSpot != null) {
+                    hoverCrosshair.SetActive(true);
+                } else if (hidingSpot != null || fm != null || brain != null || parasite != null) {
 					investigate.SetActive (true);
-				}
+                    hoverCrosshair.SetActive(true);
+                }
                 //else if (c != null)
                 //{
                 //    singlemech2.SetActive(true);
@@ -122,6 +174,7 @@ public class playerRayCasting : MonoBehaviour {
                     mechUI.SetActive(false);
                     singlemech.SetActive(false);
 					investigate.SetActive (false);
+                    hoverCrosshair.SetActive(false);
                 }
                        
             }
@@ -139,13 +192,21 @@ public class playerRayCasting : MonoBehaviour {
 
             if (Input.GetKeyDown(KeyCode.Q))
             {
-                if (m != null)
+                if (m != null || fm != null)
                 {
                     medinvest.Play();
                 }
                 if (p != null)
                 {
                     puzzleinvest.Play();
+                }
+                if(brain != null)
+                {
+                    audso.Ugh();
+                }
+                if (parasite != null)
+                {
+                    audso.whatisthis();
                 }
                 if (od != null)
                 {
@@ -164,6 +225,18 @@ public class playerRayCasting : MonoBehaviour {
 
             if (Input.GetKeyDown(KeyCode.E))
             {
+                if (bc != null)
+                {
+                    buttoncase.SetTrigger("openCase");
+                    buttoncaseCol.GetComponent<Collider>().enabled = false;
+                }
+                if (button != null)
+                {
+                    buttonAnim.SetTrigger("pushButton");
+                    cameraShake.SetTrigger("shake");
+                    buttonCol.GetComponent<Collider>().enabled = false;
+                    endScene();
+                }
                 if (c != null)
                 {
                     checkMed = true;
@@ -180,8 +253,17 @@ public class playerRayCasting : MonoBehaviour {
                         clipSound.Play();
                         clipboardUI.SetActive(true);
                         clipMatch.boardIMG.SetActive(true);
+                        isWifeBoard = clipMatch.wifeBoard;
                         activeImage = clipMatch.boardIMG;
                         clipShowing = true;
+
+                        if (wifeBoardSeen == false)
+                        {
+                            if (isWifeBoard == true)
+                            {
+                                audso.noClaire();
+                            }
+                        }
                     }
                 }
                 else
@@ -189,6 +271,15 @@ public class playerRayCasting : MonoBehaviour {
                     clipboardUI.SetActive(false);
                     activeImage.SetActive(false);
                     clipShowing = false;
+
+                    if (wifeBoardSeen == false)
+                    {
+                        if (isWifeBoard == true)
+                        {
+                            audso.claireInvolved();
+                            wifeBoardSeen = true;
+                        }
+                    }
                 }
                 //
 
@@ -215,14 +306,6 @@ public class playerRayCasting : MonoBehaviour {
 //			if (whatIHit.collider.tag == null) {
 //				GM.instance.hideMoveMed ();
 //			}
-			if (whatIHit.collider.tag == "MoveMed") {
-				GM.instance.displayMoveMed ();
-
-			} else {
-				GM.instance.hideMoveMed ();
-
-
-			}
 
 
             if (Input.GetKeyDown (KeyCode.E)) {
@@ -232,12 +315,17 @@ public class playerRayCasting : MonoBehaviour {
 
 //					Debug.Log ("WTF");
 					if (whatIHit.collider.gameObject.GetComponent<Medicine> ().whatMedAmI == Medicine.MedicineType.movement) {
+						checkMedMove = true;
 						audso.playTakeItem ();
-						GM.instance.hideMoveMed ();
-						GM.instance.playerHidden ();
+						GM.instance.onTakeMoveMed ();
+
+//						GM.instance.hideMoveMed ();
+//						GM.instance.playerHidden ();
+
 //						GM.instance.displayClipBoard ();
 						Destroy (whatIHit.collider.gameObject);
-					}
+                        mechUI.SetActive(false);
+                    }
 					//add code to hide clipboard after viewing
 
 
@@ -247,23 +335,26 @@ public class playerRayCasting : MonoBehaviour {
 
 //					Debug.Log ("WTF");
 					if (whatIHit.collider.gameObject.GetComponent<Medicine> ().whatMedAmI == Medicine.MedicineType.sound) {
+						checkMedSound = true;
 						audso.playTakeItem ();
 						GM.instance.onTakeSoundMed ();
 						Destroy (whatIHit.collider.gameObject);
-					}
+                        mechUI.SetActive(false);
+                    }
 
 
 
 				}
 				if (whatIHit.collider.tag == "LightMedicine") {
 
-
+					checkMedLight = true;
 //					Debug.Log ("WTF");
 					if (whatIHit.collider.gameObject.GetComponent<Medicine> ().whatMedAmI == Medicine.MedicineType.light) {
 						audso.playTakeItem ();
 						GM.instance.onTakeLightMed ();
 						Destroy (whatIHit.collider.gameObject);
-					}
+                        mechUI.SetActive(false);
+                    }
 
 
 
@@ -325,17 +416,53 @@ public class playerRayCasting : MonoBehaviour {
 
 		} else {
 			touching = false;
-		}
-		if (touching == false) {
-			GM.instance.hideMoveMed ();
-		}
+            mechUI.SetActive(false);
+            singlemech.SetActive(false);
+            investigate.SetActive(false);
+            hoverCrosshair.SetActive(false);
+        }
+        
+        if (endPlaying == true)
+        {
+            endtimer += Time.deltaTime;
+        }
 
+        if (endtimer >= 18)
+        {
+            whiteScreen.SetActive(true);
+        }
 
-	}
+        if (endtimer >= 28)
+        {
+            endCredits.SetActive(true);
+        }
 
+        if (endtimer >= 40)
+        {
+            restart.gameObject.GetComponent<GM>().BacktoStart();
+        }
 
+    }
 
-	void OnTriggerEnter(Collider other) {
+    void endScene()
+    {
+        endLight1.SetActive(false);
+        endLight1model.SetActive(false);
+        endLight2.SetActive(false);
+        endLight2model.SetActive(false);
+        endLight3.SetActive(true);
+        endLight3model.SetActive(true);
+        endLight4.SetActive(true);
+        endLight4model.SetActive(true);
+        explosion.Play();
+        seeYou.Play();
+        endPlaying = true;
+        restart.gameObject.GetComponent<GM>().stopLevelOneSound();
+        restart.gameObject.GetComponent<GM>().stopLevelTwoSound();
+        restart.gameObject.GetComponent<GM>().stopLevelThreeSound();
+    }
+
+    void OnTriggerEnter(Collider other) {
 
 		if (other.gameObject.tag == "Hide") {
 

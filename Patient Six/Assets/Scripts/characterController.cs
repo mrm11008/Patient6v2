@@ -23,7 +23,10 @@ public class characterController : MonoBehaviour {
 	public float speed = 10.0f;
 	public float length = 0;
 	public int getOutCount = 0;
-	public bool hidden = false;
+    public int thisplaceCount = 0;
+    public int noexitCount = 0;
+    public int saveyouCount = 0;
+    public bool hidden = false;
 
 	public bool robotChase = false;
 	public bool moveHasPlayed = false;
@@ -169,14 +172,9 @@ public class characterController : MonoBehaviour {
             {
                 audso.stopFootsteps();
             }
-
-            if (Input.GetKeyDown("escape"))
-            {
-                Cursor.lockState = CursorLockMode.None;
-            }
         }
 
-		robotChase = GM.instance.ChaseCheck ();
+//		robotChase = GM.instance.ChaseCheck ();
 //		if (robotChase == true && hidden == true) {
 //			audso.playHidden ();
 //		}
@@ -200,12 +198,48 @@ public class characterController : MonoBehaviour {
 
 			Debug.Log ("PLAYER IS HIDING");
 		}
-	}
+        if (other.gameObject.tag == "ThisPlaceTrigger")
+        {
+
+            if (thisplaceCount == 0)
+            {
+                audso.thisPlace();
+                thisplaceCount++;
+            }
+
+        }
+        if (other.gameObject.tag == "noExitTrigger")
+        {
+
+            if (noexitCount == 0)
+            {
+                audso.noExit();
+                noexitCount++;
+            }
+
+        }
+
+        if (other.gameObject.tag == "saveyouTrigger")
+        {
+
+            if (saveyouCount == 0)
+            {
+                if (audso.GetComponentInChildren<playerRayCasting>().wifeBoardSeen == true)
+                {
+                    audso.saveYou();
+                    saveyouCount++;
+                }
+            }
+
+        }
+    }
 
 	void OnTriggerExit(Collider other) {
 		if (other.gameObject.tag == "Hide") {
 			hidden = false;
-			if (robotChase = true) {
+			robotChase = GM.instance.ChaseCheck ();
+			if (robotChase == true) {
+				print ("WHY AM I TRUE");
 				audso.playHidden ();
 			}
 //			Debug.Log ("PLAYER IS NOT HIDING");

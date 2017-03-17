@@ -31,6 +31,11 @@ public class SoundMeter : MonoBehaviour {
 		soundMeterValues.text = "Sound: " + soundFloat;
 	}
 
+	public void TutorialSet() {
+		soundFloat = 75;
+	}
+
+
 	void decrementSound() {
 //		Debug.Log ("DECREMENT");
 		soundFloat = soundFloat - decrementValue;

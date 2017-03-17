@@ -25,10 +25,10 @@ public class Puzzle : MonoBehaviour {
     public GameObject mechUI;
     public Collider pdoor;
     public GameObject soundTrigger;
+    public AudioSource doorCloseSound;
 
     //Door Triggers
-    public Animator doorLeft;
-    public Animator doorRight;
+    public Animator puzzleDoors;
 
     void Start()
     {
@@ -270,10 +270,8 @@ public class Puzzle : MonoBehaviour {
         if (i == 3 && c == 1 && s == 4 && r == 5 && t == 0 && n == 2)
         {
             //Door Triggers Reset
-            doorLeft.SetTrigger("doorOpen");
-            doorRight.SetTrigger("doorOpen");
-            doorLeft.ResetTrigger("doorClose");
-            doorRight.ResetTrigger("doorClose");
+            puzzleDoors.SetTrigger("openDoors");
+            puzzleDoors.ResetTrigger("closeDoors");
             pdoor.enabled = false;
             soundTrigger.SetActive(true);
 
@@ -301,6 +299,14 @@ public class Puzzle : MonoBehaviour {
         box4.sprite = sprites[r];
         box5.sprite = sprites[t];
         box6.sprite = sprites[n];
+    }
+
+    public void DoorTrigger()
+    {
+        doorCloseSound.Play();
+        puzzleDoors.SetTrigger("closeDoors");
+        puzzleDoors.ResetTrigger("openDoors");
+        soundTrigger.SetActive(false);
     }
 
 }

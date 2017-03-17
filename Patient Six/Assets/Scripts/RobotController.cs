@@ -52,6 +52,8 @@ public class RobotController : MonoBehaviour {
 	public GameObject redLights;
 	public GameObject whiteLights;
 
+	public bool tutorialBot = false;
+
 	// Use this for initialization
 	void Start () {
 		robotsound = gameObject.GetComponent<RobotSounds> ();
@@ -63,6 +65,39 @@ public class RobotController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+		if (tutorialBot == true) {
+//			currentState = STATE.WAIT;
+			print("TUTORIALBOT");
+			//THE PLAYER IS IN SIGHT
+			Debug.DrawRay (this.transform.position, this.transform.forward * distanceToSee, Color.blue);
+			Debug.DrawRay (this.transform.position, this.transform.forward * distanceToAttack, Color.red);
+			if (Physics.Raycast (this.transform.position, this.transform.forward, out whatISee, distanceToSee) && playerHidden == false) {
+				//			Debug.Log (whatISee.collider.tag);
+				if (whatISee.collider.tag == "Player") {
+					if (playSoundOne == true) {
+						robotsound.playFoundSound ();
+						playSoundOne = false;
+					}
+					EnterChaseState ();
+					Debug.Log ("I SEE THE PLAYER");
+				} 
+			}
+			//THE PLAYER IS WITHIN ATTACKING DISTANCE
+			if (Physics.Raycast (this.transform.position, this.transform.forward, out whatIHit, distanceToAttack)) {
+				if (whatIHit.collider.tag == "Player") {
+					//				Debug.Log ("DART!!");
+					if (playSoundTwo == true) {
+						robotsound.playDartSound ();
+						GM.instance.dartSound ();
+						playSoundTwo = false;
+					}
+					GM.instance.dartPlayerTutorial ();
+//					EnterRecallState ();
+				}
+			}
+		}
+
 		switch (currentState) {
 		case STATE.WAIT:
 			UpdateWait ();
@@ -81,8 +116,10 @@ public class RobotController : MonoBehaviour {
 		playerHidden = player.CheckHidden ();
 
 		if (currentState == STATE.CHASE) {
+			print ("I AM CHASING");
 			GM.instance.Chasing ();
 		} else {
+			print ("I AM NOT CHASING");
 			GM.instance.NotChasing ();
 		}
 
@@ -110,7 +147,10 @@ public class RobotController : MonoBehaviour {
 					GM.instance.dartSound ();
 					playSoundTwo = false;
 				}
-				GM.instance.dartPlayer ();
+
+					GM.instance.dartPlayer ();
+				
+
 				EnterRecallState ();
 			}
 		}
@@ -285,12 +325,12 @@ public class RobotController : MonoBehaviour {
 		EnterWaitState ();
 	}
 	public void foundPlayer() {
-		EnterChaseState ();
+		
 		if (playSoundOne == true) {
 			robotsound.playFoundSound ();
 			playSoundOne = false;
 		}
-
+		EnterChaseState ();
 		Debug.Log ("I SEE THE PLAYER");
 	}
 }

@@ -1,65 +1,71 @@
 fileFormatVersion: 2
-guid: e77a4fc15994443d8ac3c36378187c33
+guid: d80ff01be6f6c41ea995e27cdb8f310f
+timeCreated: 1489336474
+licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: defaultLight
-    100002: group1
-    100004: pCylinder1
-    100006: pCylinder2
-    100008: pCylinder3
-    100010: pCylinder4
-    100012: pCylinder5
-    100014: pCylinder6
-    100016: pPipe1
-    100018: pPipe2
-    100020: pPipe3
-    100022: pSphere1
-    100024: //RootNode
+    100002: glass1
+    100004: group1
+    100006: inside
+    100008: needle
+    100010: pCylinder2
+    100012: pCylinder3
+    100014: pCylinder4
+    100016: pCylinder6
+    100018: pPipe1
+    100020: pPipe2
+    100022: pPipe3
+    100024: pSphere1
+    100026: //RootNode
     400000: defaultLight
-    400002: group1
-    400004: pCylinder1
-    400006: pCylinder2
-    400008: pCylinder3
-    400010: pCylinder4
-    400012: pCylinder5
-    400014: pCylinder6
-    400016: pPipe1
-    400018: pPipe2
-    400020: pPipe3
-    400022: pSphere1
-    400024: //RootNode
-    2300000: pCylinder1
-    2300002: pCylinder2
-    2300004: pCylinder3
-    2300006: pCylinder4
-    2300008: pCylinder5
-    2300010: pCylinder6
-    2300012: pPipe1
-    2300014: pPipe2
-    2300016: pPipe3
-    2300018: pSphere1
-    3300000: pCylinder1
-    3300002: pCylinder2
-    3300004: pCylinder3
-    3300006: pCylinder4
-    3300008: pCylinder5
-    3300010: pCylinder6
-    3300012: pPipe1
-    3300014: pPipe2
-    3300016: pPipe3
-    3300018: pSphere1
-    4300000: pCylinder1
+    400002: glass1
+    400004: group1
+    400006: inside
+    400008: needle
+    400010: pCylinder2
+    400012: pCylinder3
+    400014: pCylinder4
+    400016: pCylinder6
+    400018: pPipe1
+    400020: pPipe2
+    400022: pPipe3
+    400024: pSphere1
+    400026: //RootNode
+    2300000: glass1
+    2300002: inside
+    2300004: needle
+    2300006: pCylinder2
+    2300008: pCylinder3
+    2300010: pCylinder4
+    2300012: pCylinder6
+    2300014: pPipe1
+    2300016: pPipe2
+    2300018: pPipe3
+    2300020: pSphere1
+    3300000: glass1
+    3300002: inside
+    3300004: needle
+    3300006: pCylinder2
+    3300008: pCylinder3
+    3300010: pCylinder4
+    3300012: pCylinder6
+    3300014: pPipe1
+    3300016: pPipe2
+    3300018: pPipe3
+    3300020: pSphere1
+    4300000: glass1
     4300002: pCylinder2
     4300004: pCylinder3
     4300006: pCylinder4
-    4300008: pCylinder5
+    4300008: needle
     4300010: pCylinder6
     4300012: pSphere1
     4300014: pPipe1
     4300016: pPipe2
     4300018: pPipe3
-    9500000: //RootNode
+    4300020: inside
   materials:
     importMaterials: 1
     materialName: 0
@@ -103,7 +109,7 @@ ModelImporter:
     normalSmoothAngle: 60
     normalImportMode: 0
     tangentImportMode: 3
-  importAnimation: 1
+  importAnimation: 0
   copyAvatar: 0
   humanDescription:
     serializedVersion: 2
@@ -120,9 +126,9 @@ ModelImporter:
     rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
     hasExtraRoot: 0
-    skeletonHasParents: 0
+    skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 0
   humanoidOversampling: 1
   additionalBone: 0
   userData: 

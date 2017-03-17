@@ -5,9 +5,7 @@ using UnityEngine;
 public class DoorOpenClose : MonoBehaviour {
 
     public AudioSource doorOpen;
-    public AudioSource doorClose;
-    public Animator doorLeftClose;
-    public Animator doorRightClose;
+    public Animator puzzleDoors;
     public GameObject soundTrigger;
 
     void OnTriggerEnter(Collider other)
@@ -17,12 +15,7 @@ public class DoorOpenClose : MonoBehaviour {
 
     void OnTriggerExit(Collider other)
     {
-        doorClose.Play();
-        doorLeftClose.SetTrigger("doorClose");
-        doorRightClose.SetTrigger("doorClose");
-        doorLeftClose.ResetTrigger("doorOpen");
-        doorRightClose.ResetTrigger("doorOpen");
-        soundTrigger.SetActive(false);
+        puzzleDoors.GetComponent<Puzzle>().DoorTrigger();
     }
     
 }

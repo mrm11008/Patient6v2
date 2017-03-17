@@ -10,8 +10,15 @@ public class CharacterSounds : MonoBehaviour {
 	public AudioClip footsteps;
 	public AudioClip getOut;
     public AudioClip hospitalsound;
+    public AudioClip ugh;
+    public AudioClip what;
+    public AudioClip noexit;
+    public AudioClip thisplace;
+    public AudioClip noclaire;
+    public AudioClip saveyou;
+    public AudioClip claireinvolved;
 
-	public AudioClip movementInversion1;
+    public AudioClip movementInversion1;
 	public AudioClip movementInversion2;
 	public AudioClip movementInversion3;
 	public AudioClip movementInversion4;
@@ -39,6 +46,39 @@ public class CharacterSounds : MonoBehaviour {
     public void playHospital()
     {
         audiosource.PlayOneShot(hospitalsound);
+    }
+
+    public void Ugh()
+    {
+        audiosource.PlayOneShot(ugh);
+    }
+
+    public void whatisthis()
+    {
+        audiosource.PlayOneShot(what);
+    }
+
+    public void noExit()
+    {
+        audiosource.PlayOneShot(noexit);
+    }
+
+    public void thisPlace()
+    {
+        audiosource.PlayOneShot(thisplace);
+    }
+
+    public void noClaire()
+    {
+        audiosource.PlayOneShot(noclaire);
+    }
+    public void saveYou()
+    {
+        audiosource.PlayOneShot(saveyou);
+    }
+    public void claireInvolved()
+    {
+        audiosource.PlayOneShot(claireinvolved);
     }
 
     public void playTakeItem() {
