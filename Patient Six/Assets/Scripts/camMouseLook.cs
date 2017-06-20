@@ -13,6 +13,7 @@ public class camMouseLook : MonoBehaviour {
     public GameObject pausedScreen;
     public bool PauseisShowing = false;
     GameObject character;
+	public GameObject player;
 
 	// Use this for initialization
 	void Start () {
@@ -33,7 +34,7 @@ public class camMouseLook : MonoBehaviour {
             mouseLook.y = Mathf.Clamp(mouseLook.y, -90f, 90f);
 
             transform.localRotation = Quaternion.AngleAxis(-mouseLook.y, Vector3.right);
-            character.transform.localRotation = Quaternion.AngleAxis(mouseLook.x, character.transform.up);
+			player.transform.localRotation = Quaternion.AngleAxis(mouseLook.x, player.transform.up);
 
         }
 

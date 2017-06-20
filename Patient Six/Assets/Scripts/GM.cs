@@ -29,6 +29,12 @@ public class GM : MonoBehaviour {
     public Image activeSound;
     public Image activeMovement;
     public Image activeLight;
+    public Image soundBars;
+    public Image moveBars;
+    public Image lightBars;
+    public GameObject lightDangerIcon;
+    public GameObject moveDangerIcon;
+    public GameObject soundDangerIcon;
 
     //UI Screens
     public GameObject startUI;
@@ -36,11 +42,18 @@ public class GM : MonoBehaviour {
     public GameObject crosshair;
 	public GameObject tutorialUI;
     public GameObject pausedUI;
+    //public GameObject lightDanger;
+    //public GameObject moveDanger;
+    //public GameObject soundDanger;
     private bool pauseShowing;
 
     //Cameras
     public Camera PlayerCam;
     public Camera StartScreen;
+	public Camera HidingCameraOne;
+	public Camera HidingCameraTwo;
+
+
 
     //public GameObject MovementMeter;
 	public MovementMeter mMeter;
@@ -107,6 +120,7 @@ public class GM : MonoBehaviour {
 	public int tutCount = 0;
 	public bool tutorialRun = false;
     public Animator tutDoor;
+	public bool tutorialPlayer = false;
 
     //END
     public GameObject endCheck;
@@ -114,8 +128,25 @@ public class GM : MonoBehaviour {
 	//TIME TRIGGERS
 	public float movementTriggerTimer = 30.0f;
 	public float lightTriggerTimer = 60.0f;
-
+	float waitHide = 1.0f;
 	public bool tutorialCheckBool = false;
+
+
+	public characterController player;
+	public playerRayCasting pRay;
+
+	//FULL METERS VARIABLES
+	public bool moveMeterFull = false;
+	public bool lightMeterFull = false;
+	public bool soundMeterFull = false;
+
+	//KEY VARIABLES
+	public bool hasKey = false;
+	public GameObject KeySymbol;
+
+	//DOOR
+	public Animator doorOpen;
+	public GameObject outerDoor;
 
 	void Awake() {
 //		clonePlayer = Instantiate (playerPrefab, playerPosition, Quaternion.identity) as GameObject;
@@ -133,10 +164,18 @@ public class GM : MonoBehaviour {
         Scene currentScene = SceneManager.GetActiveScene();
         string sceneName = currentScene.name;
 
-        if (sceneName == "StartTutorial")
+        // @MAX here is where I've initialized the brain bars. 
+        //This value just needs to be connected to the ticking numbers
+        soundBars.fillAmount = 1;
+        moveBars.fillAmount = 1;
+        lightBars.fillAmount = 1;
+
+        if (sceneName == "StartTutorialv2")
         {
             PlayerCam.enabled = false;
             StartScreen.enabled = true;
+
+
         }
         else
         {
@@ -155,12 +194,12 @@ public class GM : MonoBehaviour {
 	}
 
 	public void LaunchTutorial() {
-		Application.LoadLevel ("StartTutorial");
+		Application.LoadLevel ("StartTutorialv2");
 	}
 
     public void BacktoStart()
     {
-        Application.LoadLevel("StartTutorial");
+        Application.LoadLevel("StartTutorialv2");
         Time.timeScale = 1f;
     }
 
@@ -170,13 +209,13 @@ public class GM : MonoBehaviour {
 			//ask if the player wants to play the tutorial?
 			//if yes
 			tutorialRun = true;
-			Application.LoadLevel ("StartTutorial");
+			Application.LoadLevel ("StartTutorialv2");
 		} 
 
 	}
 
 	public void LoadGame() {
-		Application.LoadLevel("StartTutorial");
+		Application.LoadLevel("StartTutorialv2");
 	}
 
 	public bool GetTutorialCheck () {
@@ -196,7 +235,9 @@ public class GM : MonoBehaviour {
 
 	public void Setup() {
         //float fadeTime = GameObject.Find("GM").GetComponent<Fading>().BeginFade(-1);
-		if (tutorialCheckBool == true) {
+//		if (tutorialCheckBool == true) {
+		if (tutorialPlayer == true) {
+			
 			mMeter.TutorialSet ();
 			lMeter.TutorialSet ();
 			sMeter.TutorialSet ();
@@ -208,6 +249,13 @@ public class GM : MonoBehaviour {
         //cloneRobot = Instantiate (robotPrefab, robotPosition, Quaternion.identity) as GameObject;
         //Switch Camera
         PlayerCam.enabled = true;
+
+		HidingCameraOne.enabled = false;
+		HidingCameraOne.gameObject.SetActive (false);
+		HidingCameraTwo.enabled = false;
+		HidingCameraTwo.gameObject.SetActive (false);
+
+
         StartScreen.enabled = false;
         Cursor.lockState = CursorLockMode.Locked;
         //Set up sound
@@ -271,9 +319,92 @@ public class GM : MonoBehaviour {
 		robotPrefab.GetComponent<RobotController>().dartReset();
     }
 
+	//PICKUP KEY
+	public void PickUpKey() {
+		hasKey = true;
+		KeySymbol.SetActive (true);
+		print ("PLAYER HAS THE KEY");
+	}
+	public void DoorCheck() {
+		if (hasKey) {
+			doorOpen.SetTrigger ("openDoors");
+			doorOpen.ResetTrigger ("closeDoors");
+			outerDoor.GetComponent<Collider> ().enabled = false;
+		} else {
+			player.PlayLocked ();
+		}
+
+
+	}
+
 	// Update is called once per frame
 	void Update () {
-        
+		//FULL METER CHECK
+		if (sMeter.getSoundValue () == 100) {
+			soundMeterFull = true;
+			pRay.HideSoundUseMech ();
+		} else {
+			soundMeterFull = false;
+			pRay.ShowSoundUseMech ();
+		}
+
+		if (mMeter.getMovementValue () == 100) {
+			moveMeterFull = true;
+//			pRay.HideUseMech ();
+			pRay.HideMovementUseMech();
+		} else {
+			moveMeterFull = false;
+			pRay.ShowMovementUseMech ();
+		}
+
+		if (lMeter.getLightValue () == 100) {
+			lightMeterFull = true;
+//			pRay.HideUseMech ();
+			pRay.HideLightUseMech();
+		} else {
+			lightMeterFull = false;
+			pRay.ShowLightUseMech ();
+		}
+
+
+		//HIDING CAMERA CHECKS
+
+		if (!tutorialPlayer) {
+			if (HidingCameraOne.enabled) {
+				print ("HIDING CAMERA IS ENALBED");
+
+				waitHide -= Time.deltaTime;
+				if (waitHide <= 0) {
+					if (Input.GetMouseButtonDown (0)) {
+						print ("MOUSE BUTTON, SHOULDNT HAPPEN FIRST");
+						//				PlayerCam.gameObject.SetActive (true);
+						//				PlayerCam.enabled = true;
+						//				HidingCameraOne.enabled = false;
+						//				HidingCameraOne.gameObject.SetActive (false);
+						HidingCameraSwitchOne ();
+						waitHide = 1.0f;
+					}
+				}
+			}
+			if (HidingCameraTwo.enabled) {
+				print ("HIDING CAMERA IS ENALBED");
+
+				waitHide -= Time.deltaTime;
+				if (waitHide <= 0) {
+					if (Input.GetMouseButtonDown (0)) {
+						print ("MOUSE BUTTON, SHOULDNT HAPPEN FIRST");
+						//				PlayerCam.gameObject.SetActive (true);
+						//				PlayerCam.enabled = true;
+						//				HidingCameraOne.enabled = false;
+						//				HidingCameraOne.gameObject.SetActive (false);
+						HidingCameraSwitchTwo ();
+						waitHide = 1.0f;
+					}
+				}
+			}
+
+		}
+
 		//METER TIME TRIGGERS
 		if (sSwitch == true) {
 			movementTriggerTimer -= Time.deltaTime;
@@ -309,11 +440,7 @@ public class GM : MonoBehaviour {
                 }
                 else
                 {
-                    pausedUI.SetActive(false);
-                    Time.timeScale = 1f;
-                    pauseShowing = false;
-                    Cursor.visible = false;
-                    Cursor.lockState = CursorLockMode.Locked;
+                    Resume();
                 }
             }
             else
@@ -357,11 +484,20 @@ public class GM : MonoBehaviour {
 			lMeter.gameObject.SetActive (true);
 		}
 
+
+		//NEW BRAIN UI IMAGE CHANGER
+		soundBars.fillAmount = (float)sMeter.getSoundValue()/100f;
+		moveBars.fillAmount = (float)mMeter.getMovementValue()/100f;
+		lightBars.fillAmount = (float)lMeter.getLightValue () / 100f;
+//		(float)sMeter.getSoundValue() = soundBars.fillAmount;
+		if (sMeter.getSoundValue () <= 30) {
+
+		}
         //------------------------------------SOUND METER LEVEL CHECK--------------------------
         if (sMeter.getSoundValue() <= 100 && sSwitch == false)
         {
             //Brain
-            activeSound.sprite = soundStates[4];
+            //activeSound.sprite = soundStates[4];
         }
 
         if (sMeter.getSoundValue () <= 100 && sMeter.getSoundValue () > 75 && sSwitch == true) {
@@ -369,26 +505,30 @@ public class GM : MonoBehaviour {
             //			playSound = true;
 
             //Brain
-            activeSound.sprite = soundStates[0];
+            //activeSound.sprite = soundStates[0];
         }
 		if (sMeter.getSoundValue () <= 75 && sMeter.getSoundValue () > 50) {
             playSoundCountNew = 1;
             //			playSound = true;
 
             //Brain
-            activeSound.sprite = soundStates[1];
+            //activeSound.sprite = soundStates[1];
         }
 		if (sMeter.getSoundValue () < 50 && sMeter.getSoundValue () > 25) {
 			playSoundCountNew = 2;
             //			playSound = true;
 
             //Brain
-            activeSound.sprite = soundStates[2];
+            //activeSound.sprite = soundStates[2];
         }
 
         if (sMeter.getSoundValue() < 25 && sMeter.getSoundValue() >= 0)
         {
-            activeSound.sprite = soundStates[3];
+            //activeSound.sprite = soundStates[3];
+            soundDangerIcon.SetActive(true);
+        } else
+        {
+            soundDangerIcon.SetActive(false);
         }
 
         if (playSoundCount == playSoundCountNew) {
@@ -426,20 +566,25 @@ public class GM : MonoBehaviour {
         //------------------------------------LIGHT METER LEVEL CHECK--------------------------
         if (lMeter.getLightValue() == 100 && lSwitch == false)
         {
-            activeLight.sprite = lightStates[4];
+            //activeLight.sprite = lightStates[4];
         }
         if (lMeter.getLightValue () <= 100 && lMeter.getLightValue () > 75 && lSwitch == true) {
-            activeLight.sprite = lightStates[0];
+            //activeLight.sprite = lightStates[0];
         }
 		if (lMeter.getLightValue () <= 75 && lMeter.getLightValue () > 50) {
-            activeLight.sprite = lightStates[1];
+            //activeLight.sprite = lightStates[1];
         }
 		if (lMeter.getLightValue () < 50 && lMeter.getLightValue () > 25) {
-            activeLight.sprite = lightStates[2];
+            //activeLight.sprite = lightStates[2];
         }
         if (lMeter.getLightValue() < 25 && lMeter.getLightValue() >= 0)
         {
-            activeLight.sprite = lightStates[3];
+            //activeLight.sprite = lightStates[3];
+            lightDangerIcon.SetActive(true);
+        }
+        else
+        {
+            lightDangerIcon.SetActive(false);
         }
 
         //		if (lightCount == lightCountNew) {
@@ -455,14 +600,16 @@ public class GM : MonoBehaviour {
         //			lightCount = 2;
         //		}
         //------------------------------------MOVEMENT METER LEVEL CHECK--------------------------
+
         if (mMeter.getMovementValue() == 100 && mSwitch == false)
         {
             //Brain
-            activeMovement.sprite = moveStates[4];
+            //activeMovement.sprite = moveStates[4];
         }
         if (mMeter.getMovementValue () <= 100 && mMeter.getMovementValue () > 75 && mSwitch == true) {
             //Brain
-            activeMovement.sprite = moveStates[0];
+			invertMovement = false;
+            //activeMovement.sprite = moveStates[0];
         }
 		if (mMeter.getMovementValue () <= 75 && mMeter.getMovementValue () > 50) {
 			Debug.Log ("MLEVEL ONE");
@@ -470,7 +617,7 @@ public class GM : MonoBehaviour {
 			moveLevelCountNew = 1;
 
             //Brain
-            activeMovement.sprite = moveStates[1];
+            //activeMovement.sprite = moveStates[1];
         }
 		if (mMeter.getMovementValue () < 50 && mMeter.getMovementValue () > 25) {
 			moveLevelCountNew = 2;
@@ -478,7 +625,7 @@ public class GM : MonoBehaviour {
 
 			movementLevelTwo ();
             //Brain
-            activeMovement.sprite = moveStates[2];
+            //activeMovement.sprite = moveStates[2];
         }
 
         if (mMeter.getMovementValue() < 25 && mMeter.getMovementValue() >= 0)
@@ -488,7 +635,12 @@ public class GM : MonoBehaviour {
 			moveLevelCountNew = 3;
 			movementLevelThree ();
             //Brain
-            activeMovement.sprite = moveStates[3];
+            //activeMovement.sprite = moveStates[3];
+            moveDangerIcon.SetActive(true);
+        }
+        else
+        {
+            moveDangerIcon.SetActive(false);
         }
         if (movLevelCount == moveLevelCountNew) {
 
@@ -509,6 +661,16 @@ public class GM : MonoBehaviour {
     public void showHidingHint()
     {
         hideHintAnim.Play();
+    }
+
+    //Resume Pause
+    public void Resume()
+    {
+        pausedUI.SetActive(false);
+        Time.timeScale = 1f;
+        pauseShowing = false;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
 	//---------------------------------METER CODE---------------------------------------
@@ -550,13 +712,20 @@ public class GM : MonoBehaviour {
 	}
 
 	public void onTakeSoundMed() {
+		
 		sMeter.incrementSound ();
+		
+
 	}
 	public void onTakeLightMed() {
+
 		lMeter.incrementLight ();
+
 	}
 	public void onTakeMoveMed() {
+		
 		mMeter.incrementMovement ();
+
 	}
 	//---------------------------------SOUND CODE---------------------------------------
 
@@ -750,6 +919,64 @@ public class GM : MonoBehaviour {
 		return isChasing;
 	}
 
+	public void HidingCameraSwitchOne() {
+		
+		if (PlayerCam.enabled) {
+			print ("THIS HAS BEEN THE FIRST CLICK");
+			player.PlayEnterLocker ();
+			HidingCameraOne.gameObject.SetActive (true);
+			HidingCameraOne.enabled = true;
+			PlayerCam.gameObject.SetActive (false);
+			PlayerCam.enabled = false;
+
+		} else if (HidingCameraOne.enabled) {
+			print ("THIS SHOULDNT HAPPEN");
+			player.PlayLeaveLocker ();
+			PlayerCam.gameObject.SetActive (true);
+			player.lockerLeave ();
+			HidingCameraOne.enabled = false;
+			PlayerCam.enabled = true;
+
+		}
 
 
+
+	}
+
+	public void HidingCameraSwitchTwo() {
+		if (PlayerCam.enabled) {
+			print ("THIS HAS BEEN THE FIRST CLICK");
+			player.PlayEnterLocker ();
+			HidingCameraTwo.gameObject.SetActive (true);
+			HidingCameraTwo.enabled = true;
+			PlayerCam.gameObject.SetActive (false);
+			PlayerCam.enabled = false;
+
+		} else if (HidingCameraTwo.enabled) {
+			print ("THIS SHOULDNT HAPPEN");
+			player.PlayLeaveLocker ();
+			PlayerCam.gameObject.SetActive (true);
+			player.lockerLeave ();
+			HidingCameraTwo.enabled = false;
+			PlayerCam.enabled = true;
+
+		}
+
+
+
+	}
+
+
+	//GETTERS FOR FULL METERS
+
+	public bool IsMoveFull() {
+		return moveMeterFull;
+	}
+
+	public bool IsLightFull() {
+		return lightMeterFull;
+	}
+	public bool IsSoundFull() {
+		return soundMeterFull;
+	}
 }

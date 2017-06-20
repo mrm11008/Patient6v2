@@ -11,6 +11,8 @@ public class playerRayCasting : MonoBehaviour {
         public Clipboard clip;
         public GameObject boardIMG;
         public bool wifeBoard = false;
+        public GameObject hPiece1;
+        public GameObject hPiece2;
     }
 
     Clipboard clip;
@@ -31,17 +33,39 @@ public class playerRayCasting : MonoBehaviour {
     //puzzle showing
     bool puzShowing = false;
     public GameObject puzzleUI;
-    public GameObject mechUI;
-    public GameObject singlemech;
-	public GameObject investigate;
+    public GameObject hideMech;
+    public GameObject takeMech;
+    public GameObject playMech;
+    public GameObject openMech;
+    public GameObject viewMech;
+    public GameObject useMech;
+    public GameObject inspectMech;
     //public GameObject singlemech2;
     public PausedState paused;
-    public GameObject hoverCrosshair;
 
     //cabinet animation
     public Animator cabinet;
     public Collider cdoorCol;
     public bool cabinetOpen = false;
+
+    //hover shader
+    private Shader outline;
+    private Shader standard;
+    private Renderer activekeyHover;
+    private Renderer activecassetteHover;
+    private Renderer activeClipHover1;
+    private Renderer activeClipHover2;
+	private Renderer activeLockerHover;
+	private Renderer activeMedHover;
+	private HoverThis[] medicineHovers;
+	private HoverThis medicineHover;
+	private HoverThis medicineLastHover;
+	private Transform medTransformCheck;
+	private GameObject medLastHit;
+	private GameObject medNowHit;
+	private GameObject lockerLastHit;
+	private GameObject lockerNowHit;
+//	private Renderer[] medicineHovers;
 
     //end variables
     public Animator buttoncase;
@@ -84,12 +108,23 @@ public class playerRayCasting : MonoBehaviour {
 	public bool checkClip = false;
 	public bool openDoor = false;
 
+	public bool SoundFull = false;
+	public bool MovementFull = false;
+	public bool LightFull = false;
+
+	public characterController player;
+
 	// Use this for initialization
 	void Start () {
 		audso = GetComponentInParent<CharacterSounds> ();
         //		audso = this.gameObject.GetComponent<CharacterSounds> ();
         buttoncase.GetComponent<Animator>();
 
+		player = GetComponentInParent<characterController> ();
+
+        //hover
+        standard = Shader.Find("Standard");
+        outline = Shader.Find("Outlined/Silhouetted Bumped");
     }
 	
 	// Update is called once per frame
@@ -99,7 +134,7 @@ public class playerRayCasting : MonoBehaviour {
 		if (isTutorial == true) {
 			//check list
 		}
-		if (checkCassette == true && checkMedMove == true && checkMedLight == true && checkMedSound == true && checkClip == true) {
+		if (checkCassette == true && checkMedMove == true && checkMedLight == true && checkMedSound == true && checkClip == true && checkHide == true) {
 			Debug.Log ("OPEN ZEE DOOR!!!");
 			GM.instance.TutorialCheck ();
 			openDoor = true;
@@ -112,6 +147,7 @@ public class playerRayCasting : MonoBehaviour {
 
             // check if clipboard
             clip = whatIHit.collider.GetComponent<Clipboard>();
+           
 
             // check if puzzledoor
             Puzzle p = whatIHit.collider.GetComponent<Puzzle>();
@@ -131,6 +167,9 @@ public class playerRayCasting : MonoBehaviour {
 
 			//check if hidingspot
 			HidingSpot hidingSpot = whatIHit.collider.GetComponent<HidingSpot>();
+			LockedLocker locker = whatIHit.collider.GetComponent<LockedLocker> ();
+            DoorKey key = whatIHit.collider.GetComponent<DoorKey> ();
+			KeyDoor door = whatIHit.collider.GetComponent<KeyDoor> ();
 
             //check if buttoncase
             ButtonCase bc = whatIHit.collider.GetComponent<ButtonCase>();
@@ -144,37 +183,179 @@ public class playerRayCasting : MonoBehaviour {
             //check if parasite
             Parasite parasite = whatIHit.collider.GetComponent<Parasite>();
 
-            if (paused.GetPausedState())
+			//check speaker
+			PlaySpeaker speaker = whatIHit.collider.GetComponent<PlaySpeaker>();
+
+			//medicine hover?
+
+			if (m != null) {
+				medNowHit = m.gameObject;
+//				medicineHovers = whatIHit.collider.GetComponentsInChildren<HoverThis> ();
+//				foreach (HoverThis hover in medicineHovers) {
+//					hover.gameObject.GetComponent<Renderer>().material.shader = outline;
+//					activeMedHover = hover.gameObject.GetComponent<Renderer>();
+//				}
+//				clipMatch.hPiece2.GetComponent<Renderer>().material.shader = outline;
+//				activeClipHover1 = clipMatch.hPiece1.GetComponent<Renderer>();
+				medicineHover = whatIHit.collider.GetComponentInChildren<HoverThis>();
+				medicineHover.GetComponentInChildren<Renderer> ().material.shader = outline;
+				activeMedHover = medicineHover.GetComponentInChildren<Renderer> ();
+//				whatIHit.collider.GetComponentInChildren<Renderer> ().material.shader = outline;
+//				activeMedHover = whatIHit.collider.GetComponentInChildren<Renderer> ();
+				if (medLastHit && medLastHit != medNowHit) {
+					medicineLastHover = medLastHit.GetComponentInChildren<HoverThis> ();
+					medicineLastHover.GetComponentInChildren<Renderer> ().material.shader = standard;
+				}
+				medLastHit = medNowHit;
+			} else {
+//				medLastHit = medNowHit;
+				if (activeMedHover != null) {
+					activeMedHover.material.shader = standard;
+				}
+
+//				if (medLastHit && medLastHit != medNowHit) {
+//					medicineLastHover = medLastHit.GetComponentInChildren<HoverThis> ();
+//					medicineLastHover.GetComponentInChildren<Renderer> ().material.shader = standard;
+//				}
+//				activeMedHover.material.shader = standard;
+			}
+
+			//locker hover
+			if (locker != null) {
+				lockerNowHit = locker.gameObject;
+				whatIHit.collider.GetComponent<Renderer> ().material.shader = outline;
+				activeLockerHover = whatIHit.collider.GetComponent<Renderer> ();
+
+				if (lockerLastHit && lockerLastHit != lockerNowHit) {
+//					medicineLastHover = medLastHit.GetComponentInChildren<HoverThis> ();
+//					medicineLastHover.GetComponentInChildren<Renderer> ().material.shader = standard;
+
+					lockerLastHit.GetComponent<Renderer> ().material.shader = standard;
+				}
+				lockerLastHit = lockerNowHit;
+			} else {
+				if (activeLockerHover != null)
+				{
+					activeLockerHover.material.shader = standard;
+				}
+			}
+
+            //speaker hover
+            if (speaker != null)
             {
-                mechUI.SetActive(false);
-                singlemech.SetActive(false);
-				investigate.SetActive (false);
-                //singlemech2.SetActive(false);
+                whatIHit.collider.GetComponent<Renderer>().material.shader = outline;
+                activecassetteHover = whatIHit.collider.GetComponent<Renderer>();
             }
             else
             {
-				if (p != null || m != null || od != null) {
-					mechUI.SetActive (true);
-                    hoverCrosshair.SetActive(true);
-				}
-                //interact only
-                else if (clip != null || cp != null || c != null || bc != null || button != null) {
-					singlemech.SetActive (true);
-                    hoverCrosshair.SetActive(true);
-                } else if (hidingSpot != null || fm != null || brain != null || parasite != null) {
-					investigate.SetActive (true);
-                    hoverCrosshair.SetActive(true);
+                if (activecassetteHover != null)
+                {
+                    activecassetteHover.material.shader = standard;
                 }
-                //else if (c != null)
-                //{
-                //    singlemech2.SetActive(true);
-                //}
+            }
+
+            //key hover
+            if (key != null)
+            {
+                whatIHit.collider.GetComponent<Renderer>().material.shader = outline;
+                activekeyHover = whatIHit.collider.GetComponent<Renderer>();
+            }
+            else
+            {
+                if (activekeyHover != null)
+                {
+                    activekeyHover.material.shader = standard;
+                }
+            }
+
+            //Sticky UI Elements Debug, Includes all
+            if (p == null && cp == null && m == null && c == null && hidingSpot == null && locker == null 
+                && key == null && door == null && bc == null && button == null && brain == null 
+                && parasite == null)
+            {
+                viewMech.SetActive(false);
+                playMech.SetActive(false);
+                useMech.SetActive(false);
+                openMech.SetActive(false);
+                hideMech.SetActive(false);
+                takeMech.SetActive(false);
+                inspectMech.SetActive(false);
+                
+            }
+
+            if (paused.GetPausedState())
+            {
+                hideMech.SetActive(false);
+                takeMech.SetActive(false);
+				inspectMech.SetActive (false);
+            }
+            else
+            {
+                //hide,inspect
+                if (locker != null) {
+                    hideMech.SetActive(true);
+                    inspectMech.SetActive(true);
+                //view,inspect
+                }else if (p != null)
+                {
+                    viewMech.SetActive(true);
+                    inspectMech.SetActive(true);
+                //view
+                } else if (clip != null){
+                    viewMech.SetActive(true);
+                }
+                //play
+                else if(cp != null){
+                    playMech.SetActive(true);
+                }
+                //take,inspect
+                else if (m != null)
+                {
+					if (m.whatMedAmI == Medicine.MedicineType.sound) {
+						if (SoundFull == true) {
+							useMech.SetActive (false);
+						} else {
+							useMech.SetActive(true);
+						}
+					} else if (m.whatMedAmI == Medicine.MedicineType.light) {
+						if (LightFull == true) {
+							useMech.SetActive (false);
+						} else {
+							useMech.SetActive(true);
+						}
+					} else if (m.whatMedAmI == Medicine.MedicineType.movement) {
+						if (MovementFull == true) {
+							useMech.SetActive (false);
+						} else {
+							useMech.SetActive(true);
+						}
+					}
+                    
+                    inspectMech.SetActive(true);
+                }
+                //open
+                else if(c != null || door != null)
+                {
+                    openMech.SetActive(true);
+                }
+                //take
+                else if (button != null || key != null) {
+                    takeMech.SetActive(true);
+                //inspect
+                } else if (hidingSpot != null || brain != null || parasite != null) {
+                    inspectMech.SetActive(true);
+				} else if (speaker != null) {
+					playMech.SetActive (true);
+				}
                 else
                 {
-                    mechUI.SetActive(false);
-                    singlemech.SetActive(false);
-					investigate.SetActive (false);
-                    hoverCrosshair.SetActive(false);
+                    viewMech.SetActive(false);
+                    playMech.SetActive(false);
+                    useMech.SetActive(false);
+                    openMech.SetActive(false);
+                    hideMech.SetActive(false);
+                    takeMech.SetActive(false);
+                    inspectMech.SetActive(false);
                 }
                        
             }
@@ -190,7 +371,25 @@ public class playerRayCasting : MonoBehaviour {
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.Q))
+            //clipboard hover
+            if (clipMatch != null)
+            {
+                clipMatch.hPiece1.GetComponent<Renderer>().material.shader = outline;
+                clipMatch.hPiece2.GetComponent<Renderer>().material.shader = outline;
+                activeClipHover1 = clipMatch.hPiece1.GetComponent<Renderer>();
+                activeClipHover2 = clipMatch.hPiece2.GetComponent<Renderer>();
+            }
+            else
+            {
+                if (activeClipHover1 != null || activeClipHover2 != null)
+                {
+                    activeClipHover1.material.shader = standard;
+                    activeClipHover2.material.shader = standard;
+                }
+            }
+
+            //            if (Input.GetKeyDown(KeyCode.Q))
+            if (Input.GetMouseButtonDown(1))
             {
                 if (m != null || fm != null)
                 {
@@ -223,7 +422,8 @@ public class playerRayCasting : MonoBehaviour {
 
 
 
-            if (Input.GetKeyDown(KeyCode.E))
+//            if (Input.GetKeyDown(KeyCode.E))
+			if (Input.GetMouseButtonDown(0))
             {
                 if (bc != null)
                 {
@@ -242,6 +442,7 @@ public class playerRayCasting : MonoBehaviour {
                     checkMed = true;
                     Debug.Log("MED CHECK");
                     whatIHit.collider.gameObject.GetComponent<Cabinet>().OpenCabinet();
+                    return;
                 }
 
                 if (clipShowing == false)
@@ -264,6 +465,7 @@ public class playerRayCasting : MonoBehaviour {
                                 audso.noClaire();
                             }
                         }
+                        return;
                     }
                 }
                 else
@@ -280,6 +482,7 @@ public class playerRayCasting : MonoBehaviour {
                             wifeBoardSeen = true;
                         }
                     }
+                    return;
                 }
                 //
 
@@ -288,43 +491,83 @@ public class playerRayCasting : MonoBehaviour {
                 {
                     if (p != null)
                     {
+						viewMech.SetActive(false);
+						inspectMech.SetActive(false);
                         puzzleUI.SetActive(true);
+						Cursor.visible = true;
                         puzShowing = true;
                         Cursor.lockState = CursorLockMode.None;
+                        return;
                     }
                 }
                 else
                 {
-                    puzzleUI.SetActive(false);
-                    puzShowing = false;
-                    Cursor.lockState = CursorLockMode.Locked;
+					print ("THIS SHOULD");
+//						if (Input.GetKey.
+
+					
+
                 }
+				if (puzShowing) {
+					print ("PUZZLE IS SHOWING!!!!!");
+					if (Input.GetKeyDown(KeyCode.Z)) {
+
+						puzzleUI.SetActive(false);
+						puzShowing = false;
+						Cursor.visible = false;
+						Cursor.lockState = CursorLockMode.Locked;
+						return;
+					}
+				}
                 //
             }
+
+			if (puzShowing) {
+				print ("PUZZLE IS SHOWING!!!!!");
+				if (Input.GetKeyDown(KeyCode.Z)) {
+
+					puzzleUI.SetActive(false);
+					puzShowing = false;
+					Cursor.lockState = CursorLockMode.Locked;
+					return;
+				}
+			}
 
 //            Debug.Log (whatIHit.collider.tag);
 //			if (whatIHit.collider.tag == null) {
 //				GM.instance.hideMoveMed ();
 //			}
 
+			//CHECK TO SEE IF YOU NEED TO HIDE THE UI
+			if (player.CheckHidden ()) {
+				//ONLY WORKS FOR CROUCHING SPOTS
+				print ("HIDE THE UI");
+				hideMech.SetActive(false);
+				inspectMech.SetActive(false);
+			}
 
-            if (Input.GetKeyDown (KeyCode.E)) {
+			
+//            if (Input.GetKeyDown (KeyCode.E)) {
+			if (Input.GetMouseButtonDown(0)) {
 				Debug.Log ("I picked up a " + whatIHit.collider.gameObject.name);
 				if (whatIHit.collider.tag == "MoveMed") {
 					
 
 //					Debug.Log ("WTF");
 					if (whatIHit.collider.gameObject.GetComponent<Medicine> ().whatMedAmI == Medicine.MedicineType.movement) {
-						checkMedMove = true;
-						audso.playTakeItem ();
-						GM.instance.onTakeMoveMed ();
+						if (!GM.instance.IsMoveFull ()) {
+							checkMedMove = true;
+							audso.playTakeItem ();
+							GM.instance.onTakeMoveMed ();
 
 //						GM.instance.hideMoveMed ();
 //						GM.instance.playerHidden ();
 
 //						GM.instance.displayClipBoard ();
-						Destroy (whatIHit.collider.gameObject);
-                        mechUI.SetActive(false);
+							Destroy (whatIHit.collider.gameObject);
+							takeMech.SetActive (false);
+							inspectMech.SetActive (false);
+						}
                     }
 					//add code to hide clipboard after viewing
 
@@ -335,11 +578,14 @@ public class playerRayCasting : MonoBehaviour {
 
 //					Debug.Log ("WTF");
 					if (whatIHit.collider.gameObject.GetComponent<Medicine> ().whatMedAmI == Medicine.MedicineType.sound) {
-						checkMedSound = true;
-						audso.playTakeItem ();
-						GM.instance.onTakeSoundMed ();
-						Destroy (whatIHit.collider.gameObject);
-                        mechUI.SetActive(false);
+						if (!GM.instance.IsSoundFull ()) {
+							checkMedSound = true;
+							audso.playTakeItem ();
+							GM.instance.onTakeSoundMed ();
+							Destroy (whatIHit.collider.gameObject);
+							takeMech.SetActive (false);
+							inspectMech.SetActive (false);
+						}
                     }
 
 
@@ -350,16 +596,61 @@ public class playerRayCasting : MonoBehaviour {
 					checkMedLight = true;
 //					Debug.Log ("WTF");
 					if (whatIHit.collider.gameObject.GetComponent<Medicine> ().whatMedAmI == Medicine.MedicineType.light) {
-						audso.playTakeItem ();
-						GM.instance.onTakeLightMed ();
-						Destroy (whatIHit.collider.gameObject);
-                        mechUI.SetActive(false);
+						if (!GM.instance.IsLightFull ()) {
+							audso.playTakeItem ();
+							GM.instance.onTakeLightMed ();
+							Destroy (whatIHit.collider.gameObject);
+							takeMech.SetActive (false);
+							inspectMech.SetActive (false);
+						}
                     }
 
 
 
 				}
-					
+
+				//SPEAKER SYSTEM
+				if (whatIHit.collider.tag == "SpeakerButton") {
+					checkCassette = true;
+					whatIHit.collider.gameObject.GetComponent<PlaySpeaker> ().PlayCassette ();
+				}
+
+
+				if (whatIHit.collider.tag == "LockedDoor") { 
+					player.PlayLocked ();
+				}
+
+				if (whatIHit.collider.tag == "Key") {
+					GM.instance.PickUpKey ();
+					audso.playTakeItem ();
+					Destroy (whatIHit.collider.gameObject);
+				}
+				if (whatIHit.collider.tag == "KeyDoor") {
+					GM.instance.DoorCheck ();
+				}
+
+
+
+				if (whatIHit.collider.tag == "HideLockerOne") { 
+
+					whatIHit.collider.gameObject.GetComponent<Renderer> ().material.shader = standard;
+					checkHide = true;
+					player.lockerHidden ();
+					GM.instance.HidingCameraSwitchOne ();
+					Debug.Log ("I HAVE CLICKED THE HIDING SPOT");
+					hideMech.SetActive(false);
+					inspectMech.SetActive(false);
+				}
+				if (whatIHit.collider.tag == "HideLockerTwo") { 
+
+					whatIHit.collider.gameObject.GetComponent<Renderer> ().material.shader = standard;
+					checkHide = true;
+					player.lockerHidden ();
+					GM.instance.HidingCameraSwitchTwo ();
+					Debug.Log ("I HAVE CLICKED THE HIDING SPOT");
+					hideMech.SetActive(false);
+					inspectMech.SetActive(false);
+				}
 
 
 				if (whatIHit.collider.tag == "Clipboard") { 
@@ -416,10 +707,9 @@ public class playerRayCasting : MonoBehaviour {
 
 		} else {
 			touching = false;
-            mechUI.SetActive(false);
-            singlemech.SetActive(false);
-            investigate.SetActive(false);
-            hoverCrosshair.SetActive(false);
+            hideMech.SetActive(false);
+            takeMech.SetActive(false);
+            inspectMech.SetActive(false);
         }
         
         if (endPlaying == true)
@@ -471,6 +761,28 @@ public class playerRayCasting : MonoBehaviour {
 		}
 	}
 
+	public void HideSoundUseMech() {
+		SoundFull = true;
+	}
+
+	public void ShowSoundUseMech() {
+		SoundFull = false;
+	}
+
+	public void HideMovementUseMech() {
+		MovementFull = true;
+	}
+
+	public void ShowMovementUseMech() {
+		MovementFull = false;
+	}
+	public void HideLightUseMech() {
+		LightFull = true;
+	}
+
+	public void ShowLightUseMech() {
+		LightFull = false;
+	}
 
 
 }

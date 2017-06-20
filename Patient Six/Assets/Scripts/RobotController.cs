@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 public class RobotController : MonoBehaviour {
-	private enum STATE { WAIT, CHASE, PATROL, INVESTIGATE, RECALL};
+	private enum STATE { WAIT, CHASE, PATROL, INVESTIGATE, RECALL, WANDER};
 	STATE currentState;
 
 	RaycastHit whatISee;
@@ -12,7 +12,7 @@ public class RobotController : MonoBehaviour {
 
 //	public Vector3 startPosition = new Vector3 (-1.5f, 0.5f, 86f);
 
-	public float speed = 1.0f;
+	public float speed = 5.0f;
 	public float speedRotate = 1.0f;
 	public float reachDist = 1.0f;
 	public int currentPoint = 0;
@@ -35,6 +35,8 @@ public class RobotController : MonoBehaviour {
 	//TIMERS
 	private float investigateTimer = 8.0f;
 	private float waitTimer = 4.0f;
+	private float wanderTimer = 5.0f;
+
 
 	//SOUNDS
 	public RobotSounds robotsound;
@@ -52,7 +54,10 @@ public class RobotController : MonoBehaviour {
 	public GameObject redLights;
 	public GameObject whiteLights;
 
+	private Rigidbody rb;
 	public bool tutorialBot = false;
+	Vector3 currentDestination;
+	private float currentRunTime;
 
 	// Use this for initialization
 	void Start () {
@@ -61,6 +66,7 @@ public class RobotController : MonoBehaviour {
 //		gameObject.transform.position = startPosition;
 		EnterInvestigateState ();
 		myAgent = gameObject.GetComponent<NavMeshAgent> ();
+		rb = this.GetComponent<Rigidbody> ();
 	}
 	
 	// Update is called once per frame
@@ -71,8 +77,8 @@ public class RobotController : MonoBehaviour {
 			print("TUTORIALBOT");
 			//THE PLAYER IS IN SIGHT
 			Debug.DrawRay (this.transform.position, this.transform.forward * distanceToSee, Color.blue);
-			Debug.DrawRay (this.transform.position, this.transform.forward * distanceToAttack, Color.red);
-			if (Physics.Raycast (this.transform.position, this.transform.forward, out whatISee, distanceToSee) && playerHidden == false) {
+//			Debug.DrawRay (this.transform.position, this.transform.forward * distanceToAttack, Color.red);
+			if (Physics.Raycast (this.transform.position, this.transform.forward, out whatISee, distanceToSee) ) {
 				//			Debug.Log (whatISee.collider.tag);
 				if (whatISee.collider.tag == "Player") {
 					if (playSoundOne == true) {
@@ -85,7 +91,7 @@ public class RobotController : MonoBehaviour {
 			}
 			//THE PLAYER IS WITHIN ATTACKING DISTANCE
 			if (Physics.Raycast (this.transform.position, this.transform.forward, out whatIHit, distanceToAttack)) {
-				if (whatIHit.collider.tag == "Player") {
+				if (whatIHit.collider.tag == "Player" && playerHidden == false) {
 					//				Debug.Log ("DART!!");
 					if (playSoundTwo == true) {
 						robotsound.playDartSound ();
@@ -111,9 +117,18 @@ public class RobotController : MonoBehaviour {
 		case STATE.INVESTIGATE:
 			UpdateInvestigate ();
 			break;
+		case STATE.WANDER:
+			UpdateWander ();
+			break;
+
 		}
 
+
 		playerHidden = player.CheckHidden ();
+		if (playerHidden == true) {
+			playSoundOne = true;
+		}
+
 
 		if (currentState == STATE.CHASE) {
 			print ("I AM CHASING");
@@ -123,8 +138,8 @@ public class RobotController : MonoBehaviour {
 			GM.instance.NotChasing ();
 		}
 
-		Debug.DrawRay (this.transform.position, this.transform.forward * distanceToSee, Color.blue);
-		Debug.DrawRay (this.transform.position, this.transform.forward * distanceToAttack, Color.red);
+//		Debug.DrawRay (this.transform.position, this.transform.forward * distanceToSee, Color.blue);
+//		Debug.DrawRay (this.transform.position, this.transform.forward * distanceToAttack, Color.red);
 
 		//THE PLAYER IS IN SIGHT
 		if (Physics.Raycast (this.transform.position, this.transform.forward, out whatISee, distanceToSee) && playerHidden == false) {
@@ -140,7 +155,7 @@ public class RobotController : MonoBehaviour {
 		}
 		//THE PLAYER IS WITHIN ATTACKING DISTANCE
 		if (Physics.Raycast (this.transform.position, this.transform.forward, out whatIHit, distanceToAttack)) {
-			if (whatIHit.collider.tag == "Player") {
+			if (whatIHit.collider.tag == "Player" && playerHidden == false) {
 //				Debug.Log ("DART!!");
 				if (playSoundTwo == true) {
 					robotsound.playDartSound ();
@@ -168,6 +183,40 @@ public class RobotController : MonoBehaviour {
 	}
 
 	//---------------------------------Add New State functions------------------------------------------
+
+	private void EnterWanderState() {
+		currentState = STATE.WANDER;
+		robotsound.playLostSound ();
+		currentRunTime = Random.Range(2.0f, 3.0f);
+		currentDestination = new Vector3 ( myAgent.transform.position.x + Random.Range(-4f, 4f), myAgent.transform.position.y, myAgent.transform.position.z + Random.Range(-4f, 4f));
+
+	}
+
+	private void UpdateWander() {
+		myAgent.destination = myAgent.transform.position;
+		wanderTimer -= Time.deltaTime;
+
+//		Vector3 currentDestination = new Vector3 ( myAgent.transform.position.x + Random.Range(-4f, 4f), myAgent.transform.position.y, myAgent.transform.position.z + Random.Range(-4f, 4f));
+
+		myAgent.destination = currentDestination;
+
+		currentRunTime -= Time.deltaTime;
+
+		if (currentRunTime <= 0f) {
+			EnterWanderState ();
+		}
+//		float rotation = 35 * Time.deltaTime;
+//		print ("SPIN");
+//		transform.rotation = Quaternion.Euler (0f, transform.rotation.eulerAngles.y + rotation, 0f);
+
+		
+		if (wanderTimer <= 0) {
+			wanderTimer = 5.0f;
+			EnterPatrolState ();
+		}
+
+
+	}
 
 	private void EnterWaitState() {
 		currentState = STATE.WAIT;
@@ -246,7 +295,8 @@ public class RobotController : MonoBehaviour {
 		if (playerHidden == true) {
 			print ("ROBOT CANT SEE");
 			//ENTER A STATE FOR WHAT THE ROBOT DOES WHEN THE PLAYER GETS INTO A HIDING SPOT
-			EnterPatrolState();
+//			EnterPatrolState();
+			EnterWanderState();
 		} else {
 		}
 	}

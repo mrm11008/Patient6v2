@@ -19,6 +19,7 @@ ModelImporter:
     100022: pPipe3
     100024: pSphere1
     100026: //RootNode
+    100028: pPipmetale3
     400000: defaultLight
     400002: glass1
     400004: group1
@@ -33,6 +34,7 @@ ModelImporter:
     400022: pPipe3
     400024: pSphere1
     400026: //RootNode
+    400028: pPipmetale3
     2300000: glass1
     2300002: inside
     2300004: needle
@@ -44,6 +46,7 @@ ModelImporter:
     2300016: pPipe2
     2300018: pPipe3
     2300020: pSphere1
+    2300022: pPipmetale3
     3300000: glass1
     3300002: inside
     3300004: needle
@@ -55,6 +58,7 @@ ModelImporter:
     3300016: pPipe2
     3300018: pPipe3
     3300020: pSphere1
+    3300022: pPipmetale3
     4300000: glass1
     4300002: pCylinder2
     4300004: pCylinder3
@@ -66,6 +70,7 @@ ModelImporter:
     4300016: pPipe2
     4300018: pPipe3
     4300020: inside
+    4300022: pPipmetale3
   materials:
     importMaterials: 1
     materialName: 0

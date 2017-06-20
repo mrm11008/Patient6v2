@@ -28,6 +28,10 @@ public class CharacterSounds : MonoBehaviour {
 	public AudioClip hiddenSound2;
 	public AudioClip hiddenSound3;
 
+	public AudioClip doorLocked;
+	public AudioClip openLocker;
+	public AudioClip closeLocker;
+
 	public AudioClip lowSound;
 
 	public AudioClip hidingSpot;
@@ -39,6 +43,17 @@ public class CharacterSounds : MonoBehaviour {
 		audiosource2 = audiosources [1];
 
 	}
+
+	public void playLockerOpen() {
+		audiosource.PlayOneShot (openLocker);
+	}
+	public void playLockerClose() {
+		audiosource.PlayOneShot (closeLocker);
+	}
+	public void playLocked() {
+		audiosource.PlayOneShot (doorLocked);
+	}
+
 	public void playPickUpClip() {
 		audiosource.PlayOneShot (pickUp);
 	}
@@ -85,9 +100,22 @@ public class CharacterSounds : MonoBehaviour {
 		audiosource.PlayOneShot (takeItem);
 	}
 	public void playFootsteps() {
+		audiosource2.volume = 1.0f;
+		audiosource2.pitch = 1.0f;
 		audiosource2.Play ();
+
 	}
 	public void stopFootsteps() {
+		audiosource2.Stop ();
+	}
+
+	public void playCrouchSteps() {
+		print ("PLAYING CROUCHED STEPS");
+		audiosource2.volume = 1.0f;
+		audiosource2.pitch = 0.75f;
+		audiosource2.Play ();
+	}
+	public void stopCrouchSteps() {
 		audiosource2.Stop ();
 	}
 

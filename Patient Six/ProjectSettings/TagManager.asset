@@ -20,6 +20,14 @@ TagManager:
   - ThisPlaceTrigger
   - noExitTrigger
   - saveyouTrigger
+  - HideLocker
+  - LockedDoor
+  - Key
+  - KeyDoor
+  - HideLockerTwo
+  - HideLockerOne
+  - SpeakerButton
+  - Speaker
   layers:
   - Default
   - TransparentFX
@@ -38,8 +46,8 @@ TagManager:
   - HallwayCeiling
   - EndCeiling
   - syringe
-  - 
-  - 
+  - labdoor
+  - DoorWall
   - 
   - 
   - 

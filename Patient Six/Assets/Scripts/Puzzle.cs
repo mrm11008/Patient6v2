@@ -11,24 +11,27 @@ public class Puzzle : MonoBehaviour {
     public Image box4;
     public Image box5;
     public Image box6;
-    int i = 0; //box 1
-    int c = 1; //box 2
-    int s = 2; //box 3
-    int r = 3; //box 4
-    int t = 4; //box 5
-    int n = 5; //box 6
+    int i = 5; //box 1
+    int c = 3; //box 2
+    int s = 4; //box 3
+    int r = 2; //box 4
+    int t = 0; //box 5
+    int n = 1; //box 6
     public Sprite[] sprites;
     public AudioSource click;
+    public Animator buttoncase;
+    public Collider buttoncaseCol;
 
     //Solved
     public GameObject puzzleuihide;
-    public GameObject mechUI;
+    public GameObject woot;
+    //public GameObject mechUI;
     public Collider pdoor;
     public GameObject soundTrigger;
     public AudioSource doorCloseSound;
 
     //Door Triggers
-    public Animator puzzleDoors;
+    //public Animator puzzleDoors;
 
     void Start()
     {
@@ -46,7 +49,12 @@ public class Puzzle : MonoBehaviour {
     {
         if (i < sprites.Length)
         {
-            ++i;
+			if (i + 1 > 5) {
+				i = 0;
+			} else {
+				++i;
+			}
+            
             box1.sprite = sprites[i];
             click.Play();
             
@@ -58,7 +66,12 @@ public class Puzzle : MonoBehaviour {
     {
         if (c < sprites.Length)
         {
-            ++c;
+			if (c + 1 > 5) {
+				c = 0;
+			} else {
+				++c;
+			}
+
             box2.sprite = sprites[c];
             click.Play();
         }
@@ -69,7 +82,11 @@ public class Puzzle : MonoBehaviour {
     {
         if (s < sprites.Length)
         {
-            ++s;
+			if (s + 1 > 5) {
+				s = 0;
+			} else {
+				++s;
+			}
             box3.sprite = sprites[s];
             click.Play();
         }
@@ -80,7 +97,11 @@ public class Puzzle : MonoBehaviour {
     {
         if (r < sprites.Length)
         {
-            ++r;
+			if (r + 1 > 5) {
+				r = 0;
+			} else {
+				++r;
+			}
             box4.sprite = sprites[r];
             click.Play();
         }
@@ -91,7 +112,11 @@ public class Puzzle : MonoBehaviour {
     {
         if (t < sprites.Length)
         {
-            ++t;
+			if (t + 1 > 5) {
+				t = 0;
+			} else {
+				++t;
+			}
             box5.sprite = sprites[t];
             click.Play();
         }
@@ -102,7 +127,11 @@ public class Puzzle : MonoBehaviour {
     {
         if (n < sprites.Length)
         {
-            ++n;
+			if (n + 1 > 5) {
+				n = 0;
+			} else {
+				++n;
+			}
             box6.sprite = sprites[n];
             click.Play();
         }
@@ -113,7 +142,12 @@ public class Puzzle : MonoBehaviour {
     {
         if (i < sprites.Length)
         {
-            --i;
+			if (i - 1 < 0) {
+				i = 5;
+			} else {
+				--i;
+			}
+            
             box1.sprite = sprites[i];
             click.Play();
         }
@@ -124,7 +158,11 @@ public class Puzzle : MonoBehaviour {
     {
         if (c < sprites.Length)
         {
-            --c;
+			if (c - 1 < 0) {
+				c = 5;
+			} else {
+				--c;
+			}
             box2.sprite = sprites[c];
             click.Play();
         }
@@ -135,7 +173,12 @@ public class Puzzle : MonoBehaviour {
     {
         if (s < sprites.Length)
         {
-            --s;
+			if (s - 1 < 0) {
+				s = 5;
+			} else {
+				--s;
+			}
+			print (s);
             box3.sprite = sprites[s];
             click.Play();
         }
@@ -146,7 +189,11 @@ public class Puzzle : MonoBehaviour {
     {
         if (r < sprites.Length)
         {
-            --r;
+			if (r - 1 < 0) {
+				r = 5;
+			} else {
+				--r;
+			}
             box4.sprite = sprites[r];
             click.Play();
         }
@@ -157,7 +204,11 @@ public class Puzzle : MonoBehaviour {
     {
         if (t < sprites.Length)
         {
-            --t;
+			if (t - 1 < 0) {
+				t = 5;
+			} else {
+				--t;
+			}
             box5.sprite = sprites[t];
             click.Play();
         }
@@ -168,7 +219,11 @@ public class Puzzle : MonoBehaviour {
     {
         if (n < sprites.Length)
         {
-            --n;
+			if (n - 1 < 0) {
+				n = 5;
+			} else {
+				--n;
+			}
             box6.sprite = sprites[n];
             click.Play();
         }
@@ -257,29 +312,32 @@ public class Puzzle : MonoBehaviour {
 
         PuzzleSolve();
 
-        if (!soundTrigger.activeSelf)
-        {
-            pdoor.enabled = true;
-        }
+        //if (!soundTrigger.activeSelf)
+        //{
+        //    pdoor.enabled = true;
+        //}
 
     }
 
     void PuzzleSolve()
     {
         //Puzzle's Combination Key
-        if (i == 3 && c == 1 && s == 4 && r == 5 && t == 0 && n == 2)
+        if (i == 0 && c == 2 && s == 3 && r == 1 && t == 4 && n == 5)
         {
             //Door Triggers Reset
-            puzzleDoors.SetTrigger("openDoors");
-            puzzleDoors.ResetTrigger("closeDoors");
-            pdoor.enabled = false;
-            soundTrigger.SetActive(true);
+            //puzzleDoors.SetTrigger("openDoors");
+            //puzzleDoors.ResetTrigger("closeDoors");
+            //pdoor.enabled = false;
+            //soundTrigger.SetActive(true);
 
             //Close Puzzle
             Cursor.lockState = CursorLockMode.Locked;
-            mechUI.SetActive(false);
+            //mechUI.SetActive(false);
             PuzzleRestart();
             puzzleuihide.SetActive(false);
+
+            buttoncase.SetTrigger("openCase");
+            buttoncaseCol.GetComponent<Collider>().enabled = false;
 
         }
 
@@ -287,12 +345,12 @@ public class Puzzle : MonoBehaviour {
 
     public void PuzzleRestart()
     {
-        i = 0;
-        c = 1;
-        s = 2;
-        r = 3;
-        t = 4;
-        n = 5;
+        i = 5;
+        c = 3;
+        s = 4;
+        r = 2;
+        t = 0;
+        n = 1;
         box1.sprite = sprites[i];
         box2.sprite = sprites[c];
         box3.sprite = sprites[s];
@@ -303,10 +361,10 @@ public class Puzzle : MonoBehaviour {
 
     public void DoorTrigger()
     {
-        doorCloseSound.Play();
-        puzzleDoors.SetTrigger("closeDoors");
-        puzzleDoors.ResetTrigger("openDoors");
-        soundTrigger.SetActive(false);
+        //doorCloseSound.Play();
+        //puzzleDoors.SetTrigger("closeDoors");
+        //puzzleDoors.ResetTrigger("openDoors");
+        //soundTrigger.SetActive(false);
     }
 
 }

@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 23476526437064698}
   - component: {fileID: 54285631122346106}
   - component: {fileID: 65127981139075762}
+  - component: {fileID: 65866444538802792}
   m_Layer: 0
   m_Name: Trashcan
   m_TagString: Untagged
@@ -36,8 +37,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1540421701676082}
-  m_LocalRotation: {x: 0.3220093, y: -0.6295316, z: 0.6295316, w: -0.3220093}
-  m_LocalPosition: {x: -2.85, y: 2.72, z: -0.87}
+  m_LocalRotation: {x: -0.65880066, y: -0.25686914, z: 0.25686914, w: 0.65880066}
+  m_LocalPosition: {x: -0.849, y: -4.432, z: -0.806}
   m_LocalScale: {x: 0.16143996, y: 0.27564994, z: 0.16143999}
   m_Children: []
   m_Father: {fileID: 0}
@@ -56,7 +57,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 33d0a277f38ae4b18aba9b1d39b5a19a, type: 2}
+  - {fileID: 2100000, guid: 1695facb88e964913b62edeaf055b9f6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -97,6 +98,18 @@ Rigidbody:
   m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!65 &65127981139075762
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1540421701676082}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.1952822, y: 2.0527098, z: 3.1817849}
+  m_Center: {x: 0.00000023841856, y: 0.026355147, z: 0.000060796738}
+--- !u!65 &65866444538802792
 BoxCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
